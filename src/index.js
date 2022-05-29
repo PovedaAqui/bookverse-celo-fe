@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { DefaultContainer } from './App';
 import reportWebVitals from './reportWebVitals';
 import { StyledEngineProvider } from '@mui/material/styles';
 import AppBar from './components/AppBar';
+import ButtonAppBar from './components/ButtonAppBar';
+import BasicCard from './components/BasicCard';
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppBar />
+    <DefaultContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );
