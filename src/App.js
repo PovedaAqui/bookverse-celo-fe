@@ -1,5 +1,5 @@
-import { responsiveProperty } from '@mui/material/styles/cssUtils';
 import React, { useEffect, useState } from 'react';
+import { Metadata } from './data/Metadata';
 
 const Meta = [
   {
@@ -49,26 +49,26 @@ const Container1 = () => {
   const [search, setSearch] = useState('');
   const [metadata, setMetadata] = useState('');
 
-  useEffect(()=>{
-    fetch(`https://api-eu1.tatum.io/v3/nft/address/balance/ETH/0x1070F9e5eDD7d77a2817bd71512Ec4Ede358105b`,
-    {
-      method: 'GET',
-      headers: {
-        'x-api-key': '5ff7b3e5-f465-4cc2-b887-fa0f2baf2e5b'
-      }
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then((data) => {
-        return (
-          <div>
-          {setMetadata(data)}
-          <Container2 data = {data}/>
-          </div>
-          );
-      });
-  }, [search]);
+  // useEffect(()=>{
+  //   fetch(`https://api-eu1.tatum.io/v3/nft/address/balance/ETH/0x1070F9e5eDD7d77a2817bd71512Ec4Ede358105b`,
+  //   {
+  //     method: 'GET',
+  //     headers: {
+  //       'x-api-key': '5ff7b3e5-f465-4cc2-b887-fa0f2baf2e5b'
+  //     }
+  //   })
+  //     .then(res => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       return (
+  //         <div>
+  //         {setMetadata(data)}
+  //         <Container2 data = {data}/>
+  //         </div>
+  //         );
+  //     });
+  // }, [search]);
 
   return(
   <div>
@@ -84,26 +84,13 @@ const Container1 = () => {
   )
 };
 
-const Container2 = (props) => {
-
-    return (
-      <table style={{width:'100%'}}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Edition</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td><img src={item.image} /></td>
-              <td>{item.edition}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  };  
+export const Container2 = () => {
+  return(
+    Metadata.map((item) => {
+      return item.metadata.map((item2) => {
+        return (
+          console.log(item2.metadata.name));
+      })
+    })
+  )
+};
