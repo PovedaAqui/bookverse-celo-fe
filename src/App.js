@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Metadata } from './data/Metadata';
+//import { Metadata } from './data/Metadata';
 
 const Meta = [
   {
@@ -40,7 +40,6 @@ export const DefaultContainer = () => {
   return(
     <div>
       <Container1 />
-      <Container2 />
     </div>
   )
 };
@@ -49,26 +48,25 @@ const Container1 = () => {
   const [search, setSearch] = useState('');
   const [metadata, setMetadata] = useState('');
 
-  // useEffect(()=>{
-  //   fetch(`https://api-eu1.tatum.io/v3/nft/address/balance/ETH/0x1070F9e5eDD7d77a2817bd71512Ec4Ede358105b`,
-  //   {
-  //     method: 'GET',
-  //     headers: {
-  //       'x-api-key': '5ff7b3e5-f465-4cc2-b887-fa0f2baf2e5b'
-  //     }
-  //   })
-  //     .then(res => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       return (
-  //         <div>
-  //         {setMetadata(data)}
-  //         <Container2 data = {data}/>
-  //         </div>
-  //         );
-  //     });
-  // }, [search]);
+    useEffect(()=>{
+    fetch(`https://api-eu1.tatum.io/v3/nft/address/balance/ETH/0x1070F9e5eDD7d77a2817bd71512Ec4Ede358105b`,
+    {
+      method: 'GET',
+      headers: {
+        'x-api-key': '5ff7b3e5-f465-4cc2-b887-fa0f2baf2e5b'
+      }
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then((data) => {
+        return (
+          <div>
+          {setMetadata(data)}
+          </div>
+          );
+      });
+  }, []);
 
   return(
   <div>
@@ -80,17 +78,34 @@ const Container1 = () => {
         required
       />
     </form>
+    <Container2 data = {metadata}/>
   </div>
   )
 };
 
-export const Container2 = () => {
+const Container2 = (props) => {
+  const data = Array.from(props.data);
+
   return(
-    Metadata.map((item) => {
-      return item.metadata.map((item2) => {
-        return (
-          console.log(item2.metadata.name));
-      })
-    })
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map(item => {
+            item.metadata.map(item2 => {
+              return(
+                <tr key={data.id}>
+                  <td>{item2.metadata.name}</td> //here I got nothing
+                </tr>
+              )
+            })
+          })}
+        </tbody>
+      </table>
+    </div>
   )
-};
+}

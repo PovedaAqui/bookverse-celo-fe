@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { DefaultContainer, Container2 } from './App';
+import { DefaultContainer } from './App';
 import reportWebVitals from './reportWebVitals';
 import { StyledEngineProvider } from '@mui/material/styles';
 import AppBar from './components/AppBar';
@@ -12,7 +12,7 @@ import BasicCard from './components/BasicCard';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Container2 />
+    <DefaultContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );
