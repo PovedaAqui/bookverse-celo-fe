@@ -96,10 +96,10 @@ const Container2 = (props) => {
         </thead>
         <tbody>
           {data.map(item => {
-            item.metadata.map(item2 => {
+            return item.metadata.map(item2 => {
               return(
                 <tr key={data.id}>
-                  <td>{item2.metadata.name}</td> //here I got nothing
+                  <td>{item2.metadata.name}</td>
                 </tr>
               )
             })
