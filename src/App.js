@@ -5,6 +5,7 @@ import SearchAppBar from './components/SearchAppBar';
 import {
   connectWallet,
   getCurrentWalletConnected,
+  disconnectWallet
 } from "./util/interact.js";
 
 
@@ -46,16 +47,20 @@ export const App = () => {
 
     return(
       <div>
-        <SearchAppBar id='walletButton' apptitle={apptitle} color='primary' variant='contained' text='Connect Wallet' handle={connectWalletPressed}/>
+        <SearchAppBar id='walletButton' apptitle={apptitle} color='primary' variant='contained' text='Connect Wallet' handle={connectWalletPressed} startIcon={null}/>
       </div>
     )
   }
+
+  const WalletAddressSent = (
+    walletAddress.substring(0, 5) + '…' + walletAddress.substring(walletAddress.length - 4)
+  );
 
   const AlreadyConnected = () => {
 
     return(
       <div>
-        <SearchAppBar id='walletButton' apptitle={apptitle} color='primary' variant='contained' text={walletAddress} handle={null}/>
+        <SearchAppBar id='walletButton' apptitle={apptitle} color='secondary' variant='text' text={WalletAddressSent} handle={disconnectWallet} colorIcon='error'/>
       </div>
     )
   }

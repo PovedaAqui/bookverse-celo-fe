@@ -9,6 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -17,7 +18,7 @@ const Search = styled('div')(({ theme }) => ({
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(85),
+    marginRight: theme.spacing('65%'),
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -84,7 +85,9 @@ export default function SearchAppBar(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+
           <Button id={props.id} color={props.color} variant={props.variant} href="#contained-buttons" onClick={props.handle}>
+          {props.colorIcon ? <LogoutIcon color={props.colorIcon} /> : null}
           {props.text}
           </Button>
         </Toolbar>
