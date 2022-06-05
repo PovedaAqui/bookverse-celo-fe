@@ -1,111 +1,69 @@
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-//import { Metadata } from './data/Metadata';
+import ActionAreaCard from './components/ActionAreaCard';
+import SearchAppBar from './components/SearchAppBar';
+import {
+  connectWallet,
+  getCurrentWalletConnected,
+} from "./util/interact.js";
 
-const Meta = [
-  {
-    "name": "CeloPunks Celo Connect Edition #377",
-    "image": "https://ipfs.io/ipfs/QmRX4tFHKajU9nAxwHqJjkwtvBFCNRwJXNzdqrXUA16o3Z/377.png",
-    "edition": 377
-    // // "dna": "2cf8d6bd427cbbc6b544873c47ad45c549f295d7",
-    // // "description": "Special CeloPunks Edition created for the Workshop at the Celo Connect to celebrate the presence of CeloPunks at the Barcelona conference. This edition live in 500 pieces on the Celo Blockchain and is free to mint. CeloPunks are frens of Celo but we are not affiliated neither with them nor with LarvaLabs.",
-    // // "date": 1648755343525,
-    // // "compiler": "HashLips Art Engine",
-    // // "attributes": [
-    // //   {
-    // //     "value": "Celo Connect Dot Pattern ",
-    // //     "trait_type": "Background"
-    // //   },
-    // //   {
-    // //     "value": "Blue Woman ",
-    // //     "trait_type": "Character"
-    // //   },
-    // //   {
-    // //     "value": "EyeMask ",
-    // //     "trait_type": "Eyes"
-    // //   },
-    // //   {
-    // //     "value": "Ushanka ",
-    // //     "trait_type": "Head"
-    // //   },
-    // //   {
-    // //     "value": "Passion Red Lipstick ",
-    // //     "trait_type": "Lip"
-    // //   }
-    // ]
-  }
-  ];
 
-export const DefaultContainer = () => {
+export const App = () => {
 
-  return(
-    <div>
-      <Container1 />
-    </div>
-  )
-};
+  const [walletAddress, setWallet] = useState("");
+  const apptitle = 'Bookverse';
 
-const Container1 = () => {
-  const [search, setSearch] = useState('');
-  const [metadata, setMetadata] = useState('');
+  useEffect(async() => {
 
-    useEffect(()=>{
-    fetch(`https://api-eu1.tatum.io/v3/nft/address/balance/ETH/0x1070F9e5eDD7d77a2817bd71512Ec4Ede358105b`,
-    {
-      method: 'GET',
-      headers: {
-        'x-api-key': '5ff7b3e5-f465-4cc2-b887-fa0f2baf2e5b'
-      }
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then((data) => {
-        return (
-          <div>
-          {setMetadata(data)}
-          </div>
-          );
-      });
+    const { address } = await getCurrentWalletConnected();
+
+    setWallet(address);
+
+    addWalletListener();
   }, []);
 
-  return(
-  <div>
-    <form>
-      <input 
-        type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        required
-      />
-    </form>
-    <Container2 data = {metadata}/>
-  </div>
-  )
-};
+  function addWalletListener() {
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length > 0) {
+          setWallet(accounts[0]);
+          //setStatus("👆🏽 Write a message in the text-field above.");
+        } else {
+          setWallet("");
+        }
+      });
+    } else {
+      console.log("error");
+    }
+  }
+  
+  const connectWalletPressed = async () => {
+    const walletResponse = await connectWallet(); 
+    setWallet(walletResponse.address);
+  };
 
-const Container2 = (props) => {
-  const data = Array.from(props.data);
+  const connectWalletChecker = () => {
+
+    return(
+      <div>
+        <SearchAppBar id='walletButton' apptitle={apptitle} color='primary' variant='contained' text='Connect Wallet' handle={connectWalletPressed}/>
+      </div>
+    )
+  }
+
+  const AlreadyConnected = () => {
+
+    return(
+      <div>
+        <SearchAppBar id='walletButton' apptitle={apptitle} color='primary' variant='contained' text={walletAddress} handle={null}/>
+      </div>
+    )
+  }
 
   return(
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(item => {
-            return item.metadata.map(item2 => {
-              return(
-                <tr key={data.id}>
-                  <td>{item2.metadata.name}</td>
-                </tr>
-              )
-            })
-          })}
-        </tbody>
-      </table>
+      {walletAddress ? AlreadyConnected() : connectWalletChecker()}
+      
     </div>
   )
-}
+};
