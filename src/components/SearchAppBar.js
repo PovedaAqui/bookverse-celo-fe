@@ -84,7 +84,9 @@ export default function SearchAppBar(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Button color={props.color} variant={props.variant} href="#contained-buttons" onClick={props.handle}>{props.text}</Button>
+          <Button id={props.id} color={props.color} variant={props.variant} href="#contained-buttons" onClick={props.handle}>
+          {props.text}
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
