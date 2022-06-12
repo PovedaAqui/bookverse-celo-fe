@@ -19,6 +19,7 @@ export const NavBar = () => {
     setWallet(address);
 
     addWalletListener();
+
   }, []);
 
   function addWalletListener() {
@@ -66,7 +67,6 @@ export const NavBar = () => {
   return(
     <div>
       {walletAddress ? AlreadyConnected() : connectWalletChecker()}
-      
     </div>
   )
 };
