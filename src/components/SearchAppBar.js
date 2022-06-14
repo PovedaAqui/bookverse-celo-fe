@@ -54,7 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar(props) {
+export default function SearchAppBar({title, ...props}) {
+  const { data } = props;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -74,7 +76,7 @@ export default function SearchAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            {props.apptitle}
+            {title}
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -86,9 +88,9 @@ export default function SearchAppBar(props) {
             />
           </Search>
 
-          <Button id={props.id} color={props.color} variant={props.variant} href="#contained-buttons" onClick={props.handle}>
-          {props.colorIcon ? <LogoutIcon color={props.colorIcon} /> : null}
-          {props.text}
+          <Button id={data.id} color={data.color} variant={data.variant} href="#contained-buttons" onClick={data.handle}>
+          {data.colorIcon ? <LogoutIcon color={data.colorIcon} /> : null}
+          {data.text}
           </Button>
         </Toolbar>
       </AppBar>

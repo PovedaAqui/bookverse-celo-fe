@@ -27,7 +27,6 @@ export const NavBar = () => {
       window.ethereum.on("accountsChanged", (accounts) => {
         if (accounts.length > 0) {
           setWallet(accounts[0]);
-          //setStatus("👆🏽 Write a message in the text-field above.");
         } else {
           setWallet("");
         }
