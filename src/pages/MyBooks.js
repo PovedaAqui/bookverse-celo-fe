@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 const MyBooks = ({address}) => {
 
+    const [metadata, setMetadata] = useState('');
+
     const URL = `http://localhost:3001/api/tatumapi`;
-    const chain = 'ETH';
+    const chain = 'CELO';
     const params = { address: address, chain: chain };
 
     useEffect(() => {
@@ -17,12 +19,32 @@ const MyBooks = ({address}) => {
                 body: JSON.stringify(params)
             })
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => setMetadata(data));
     }, [])
 
-    
+    console.log(metadata);
+    const data = Array.from(metadata);
 
-    return(<div>TEST</div>)
+    return (
+        <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(({name, description, image}) => {
+                return(
+                  <tr key={data.id}>
+                    <td>{name}</td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </table>
+      </div>
+    )
 }
 
 export default MyBooks;
