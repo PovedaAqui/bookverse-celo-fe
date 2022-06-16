@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ActionAreaCard from '../components/ActionAreaCard';
 
 const MyBooks = ({address}) => {
 
@@ -19,31 +20,23 @@ const MyBooks = ({address}) => {
                 body: JSON.stringify(params)
             })
             .then(response => response.json())
-            .then(data => setMetadata(data));
+            .then(data => setMetadata(data.data));
     }, [])
 
-    console.log(metadata);
     const data = Array.from(metadata);
 
     return (
         <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map(({name, description, image}) => {
-                return(
-                  <tr key={data.id}>
-                    <td>{name}</td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </table>
-      </div>
+          {
+            data.map(data2 => {
+              return (data2.metadata.map(({metadata}) => {
+                return (setMetadata(metadata))
+              }))
+            }
+            )
+          }
+          <ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/>
+        </div>
     )
 }
 

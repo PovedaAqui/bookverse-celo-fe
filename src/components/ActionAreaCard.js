@@ -5,10 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-export default function ActionAreaCard(props) {
+export default function ActionAreaCard({...props}) {
+
+  const { name, description, image } = props;
+
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
+      <CardActionArea onClick={()=>console.log("TEST")}>
         <CardMedia
           component="img"
           height="140"
@@ -17,10 +20,10 @@ export default function ActionAreaCard(props) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            {name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.description}
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>
