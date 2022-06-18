@@ -3,7 +3,7 @@ import ActionAreaCard from '../components/ActionAreaCard';
 
 const MyBooks = ({address}) => {
 
-    const [metadata, setMetadata] = useState('');
+    const [metadata, setMetadata] = useState([]);
 
     const URL = `http://localhost:3001/api/tatumapi`;
     const chain = 'CELO';
@@ -20,23 +20,25 @@ const MyBooks = ({address}) => {
                 body: JSON.stringify(params)
             })
             .then(response => response.json())
-            .then(data => setMetadata(data.data));
+            .then(data => setMetadata(
+              (data.data).map((data2) => {
+                return data2.metadata.map((data3) => {
+                  return data3;
+                })
+              })
+            ))
+            .then(listItems)
     }, [])
 
-    const data = Array.from(metadata);
+    //console.log(metadata);
 
+    const listItems = (
+      metadata.map((data4) => {}))
+      
     return (
-        <div>
-          {
-            data.map(data2 => {
-              return (data2.metadata.map(({metadata}) => {
-                return (setMetadata(metadata))
-              }))
-            }
-            )
-          }
-          <ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/>
-        </div>
+      <div>
+        {listItems}
+      </div>
     )
 }
 
