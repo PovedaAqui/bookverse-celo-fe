@@ -27,17 +27,24 @@ const MyBooks = ({address}) => {
                 })
               })
             ))
-            .then(listItems)
     }, [])
 
-    //console.log(metadata);
-
-    const listItems = (
-      metadata.map((data4) => {}))
-      
     return (
       <div>
-        {listItems}
+        {metadata.map((data4) => {
+          return (
+            <div>
+              {data4.map(({metadata}) => {
+                return (
+                  <div>
+                    {metadata!= null && console.log(metadata)}
+                    {metadata!=null && <ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/>}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
       </div>
     )
 }
