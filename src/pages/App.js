@@ -7,6 +7,7 @@ import {
     getCurrentWalletConnected,
     disconnectWallet
   } from "../util/interact.js";
+import ShowNFT from './ShowNFT';
 
 const App = () => {
     
@@ -58,6 +59,7 @@ const App = () => {
                 <div>
                     <Routes>
                         <Route path='/' element={walletAddress.length>0 && <MyBooks address={walletAddress}/>} />
+                        <Route path='/shownft' element={<ShowNFT/>} />
                     </Routes>
                 </div>
             </div>

@@ -11,7 +11,7 @@ export default function ActionAreaCard({...props}) {
   const { name, description, image } = props;
   let url = "";
 
-  if(image!==null) {
+  if(image!==null && image.includes("ipfs://")) {
     url = image.replace("ipfs://", "https://ipfs.io/ipfs/")
   } else {
     return image;
