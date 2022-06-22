@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ActionAreaCard from '../components/ActionAreaCard';
+import { Grid } from '@mui/material';
 
 const MyBooks = ({address}) => {
   
@@ -27,15 +28,17 @@ const MyBooks = ({address}) => {
     
     return(
       <div>
-        {metadata!=undefined && metadata!=null && metadata.map((data) => {
-          return data.metadata.map(({metadata}, i) => {
-            return (
-              <div key={i}>
-                {metadata!==null && <ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/>}
-              </div>
-            )
-          })
-        })}
+        <Grid container>
+          {metadata!=undefined && metadata!=null && metadata.map((data) => {
+            return data.metadata.map(({metadata}, i) => {
+              return (
+                <div key={i}>
+                  {metadata!==null && <Grid item xs={6} md={4} key={metadata.name}><ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/></Grid>}
+                </div>
+              )
+            })
+          })}
+        </Grid>
       </div>
     )
 }

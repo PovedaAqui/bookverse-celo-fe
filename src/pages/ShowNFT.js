@@ -1,10 +1,23 @@
 import React from 'react';
+import { Grid, Divider } from '@mui/material';
+import '../App.css';
 
-const ShowNFT = () => {
+
+
+const ShowNFT = ({...props}) => {
 
     return (
         <div>
-            <h1>Show NFT</h1>
+            <Grid container>
+                <Grid>
+                    <h1>image</h1>
+                </Grid>
+                <Divider orientation="vertical" flexItem />
+                <ul className='ul'>
+                    <li>name</li>
+                    <li>description</li>
+                </ul>
+            </Grid>
         </div>
     )
 
