@@ -10,7 +10,6 @@ const ShowNFT = () => {
     const {name} = location.state.name;
     const {description} = location.state.description;
     const {url} = location.state.image;
-    // const {name, description, image} = params;
     console.log(url);
 
     return (
