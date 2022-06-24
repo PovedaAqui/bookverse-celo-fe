@@ -4,6 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import CircularProgress from './CircularProgress';
+import { Link} from 'react-router-dom';
 
 export default function ActionAreaCard({...props}) {
 
@@ -16,24 +17,28 @@ export default function ActionAreaCard({...props}) {
     return image;
   }
 
+  const params = {'name': {name}, 'description': {description}, 'image': {url}}
+
   return (
-      <Card sx={{ minWidth: 245, maxWidth: 345, mt: 3, ml: 3}}>
-        <CardActionArea onClick={()=>console.log("TEST")}>
-          {url===null ? <CircularProgress/> : <CardMedia
-            component="img"
-            height="200"
-            image={url}
-            alt="jpeg"
-          />}
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {description}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
+      <Card sx={{minWidth: 245, maxWidth: 345, mt: 3, ml: 3}}>
+        <Link to='/shownft' state={params} style={{textDecoration: 'none'}}>
+          <CardActionArea>
+            {url===null ? <CircularProgress/> : <CardMedia
+              component="img"
+              height="200"
+              image={url}
+              alt="jpeg"
+            />}
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Link>
       </Card>
   );
 }
