@@ -64,7 +64,6 @@ const ShowNFT = () => {
     
     const sendTx = async () => {
         const txConfig = JSON.parse(tx.serializedTransaction);
-        console.log(txConfig);
         txConfig.from = address;
         txConfig.nonce = undefined;
         txConfig.gasPrice = txConfig.gasPrice ? parseInt(txConfig.gasPrice).toString(16) : undefined;
