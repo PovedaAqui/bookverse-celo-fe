@@ -12,7 +12,7 @@ import ShowNFT from './ShowNFT';
 const App = () => {
     
     const [walletAddress, setWallet] = useState("");
-    const apptitle = 'Bookverse';
+    const apptitle = 'Mercapp';
 
     useEffect(async() => {
 

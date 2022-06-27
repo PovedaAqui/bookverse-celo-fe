@@ -29,11 +29,11 @@ const MyBooks = ({address}) => {
     return(
       <div>
         <Grid container>
-          {metadata!=undefined && metadata!=null && metadata.map((data) => {
-            return data.metadata.map(({metadata}, i) => {
+          {metadata!=undefined && metadata!=null && metadata.map(({metadata, contractAddress}) => {
+            return metadata.map(({metadata, tokenId}, i) => {
               return (
                 <div key={i}>
-                  {metadata!==null && <Grid item xs={6} md={4} key={metadata.name}><ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image}/></Grid>}
+                  {metadata!==null && tokenId!=null && <Grid item xs={6} md={4} key={metadata.name}><ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image} address={address} tokenId={tokenId} contractAddress={contractAddress}/></Grid>}
                 </div>
               )
             })
