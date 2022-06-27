@@ -2,14 +2,14 @@ import React from 'react';
 import { Grid, Divider, TextField, Button } from '@mui/material';
 import '../App.css';
 import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 const ShowNFT = () => {
 
     const [listing, setListing] = useState([]);
     const [price, setPrice] = useState('');
-    const [tx, setTx] = useState('');
+    const [tx, setTx] = useState([]);
 
     let location = useLocation();
     const {name} = location.state.name;
@@ -38,30 +38,30 @@ const ShowNFT = () => {
             })
             .then(response => response.json())
             .then(data => setListing(data.data))
-            .then(pendingTx())
     }
 
-    const pendingTx = () => {
+    useEffect(() => {
+   
+        const pendingTx = () => {
 
-        const {signatureId} = listing;
-
-        fetch(`http://localhost:3001/api/kms`,
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({listing: signatureId})
-            })
-            .then(response => response.json())
-            .then(data => setTx(data.data))
-            .then(sendTx)
-        
-    }
-
-    //console.log(tx);
+            const {signatureId} = listing;
     
+            fetch(`http://localhost:3001/api/kms`,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({listing: signatureId})
+                })
+                .then(response => response.json())
+                .then(data => setTx(data.data))
+        }
+        pendingTx();
+    }, [listing])
+
+   useEffect(() => {
     const sendTx = async () => {
         const txConfig = JSON.parse(tx.serializedTransaction);
         txConfig.from = address;
@@ -72,6 +72,9 @@ const ShowNFT = () => {
             params: [txConfig],
           }));
     }
+    sendTx();
+   }, [tx])
+   
 
     return (
         <div>
