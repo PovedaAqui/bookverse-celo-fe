@@ -9,7 +9,7 @@ const ShowNFT = () => {
 
     const [listing, setListing] = useState([]);
     const [price, setPrice] = useState('');
-    const [tx, setTx] = useState([]);
+    const [tx, setTx] = useState('');
 
     let location = useLocation();
     const {name} = location.state.name;
@@ -61,6 +61,7 @@ const ShowNFT = () => {
         pendingTx();
     }, [listing])
 
+
    useEffect(() => {
     const sendTx = async () => {
         const txConfig = JSON.parse(tx.serializedTransaction);
@@ -72,9 +73,8 @@ const ShowNFT = () => {
             params: [txConfig],
           }));
     }
-    sendTx();
+    tx.serializedTransaction && sendTx();
    }, [tx])
-   
 
     return (
         <div>
