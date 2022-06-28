@@ -40,6 +40,8 @@ const ShowNFT = () => {
             .then(data => setListing(data.data))
     }
 
+    //console.log(listing);
+
     useEffect(() => {
    
         const pendingTx = () => {
@@ -58,9 +60,8 @@ const ShowNFT = () => {
                 .then(response => response.json())
                 .then(data => setTx(data.data))
         }
-        pendingTx();
+        listing.signatureId && pendingTx();
     }, [listing])
-
 
    useEffect(() => {
     const sendTx = async () => {
@@ -68,6 +69,7 @@ const ShowNFT = () => {
         txConfig.from = address;
         txConfig.nonce = undefined;
         txConfig.gasPrice = txConfig.gasPrice ? parseInt(txConfig.gasPrice).toString(16) : undefined;
+        //console.log(txConfig);
         console.log(await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [txConfig],
@@ -75,6 +77,7 @@ const ShowNFT = () => {
     }
     tx.serializedTransaction && sendTx();
    }, [tx])
+
 
     return (
         <div>
