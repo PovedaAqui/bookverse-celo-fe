@@ -10,6 +10,8 @@ const ShowNFT = () => {
     const [listing, setListing] = useState([]);
     const [price, setPrice] = useState('');
     const [tx, setTx] = useState('');
+    const [listed, setListed] = useState('');
+    const [trigger, setTrigger] = useState(false);
 
     let location = useLocation();
     const {name} = location.state.name;
@@ -18,29 +20,55 @@ const ShowNFT = () => {
     const {tokenId} = location.state.tokenId;
     const {contractAddress} = location.state.contractAddress;
     const {address} = location.state.address;
+    const {listingId} = location.state.listingId;
 
     const addressTrim = (
         address.substring(0, 5) + '…' + address.substring(address.length - 4)
     );
 
-    const URL = `http://localhost:3001/api/marketplace`;
-    const params = { address: address, contractAddress: contractAddress, tokenId: tokenId, price: price, operation: 'sell' };
+    //Initial checking
 
-    const fetchListing = () => {
-        fetch(URL,
+    const initialURL = `http://localhost:3001/api/getListing`;
+    const initialParams = { chain: 'CELO', type: 'INITIATED' };
+
+    useEffect(() => {
+        fetch(initialURL,
             {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(params)
+                body: JSON.stringify({initialParams})
             })
             .then(response => response.json())
-            .then(data => setListing(data.data))
-    }
+            .then(data => setListed(data.data))
+    }, [])
+    
+    console.log(listed);
+    console.log(listingId);
+    //In this case contractAddress = nftAddress
+    const URL = `http://localhost:3001/api/marketplace`;
+    const params = { address: address, contractAddress: contractAddress, tokenId: tokenId, price: price, operation: 'sell', listingId: listingId };
 
-    //console.log(listing);
+    useEffect(() => {
+        const fetchListing = () => {
+        
+            fetch(URL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                })
+                .then(response => response.json())
+                .then(data => setListing(data.data))
+                .then(setTrigger(false))
+        }
+    trigger && fetchListing();
+    }, [trigger])
 
     useEffect(() => {
    
@@ -87,18 +115,30 @@ const ShowNFT = () => {
                 </Grid>
                 <Divider orientation="vertical" flexItem />
                 <Grid pt={2}>
-                <ul className='ul'>
-                    <li>{name}</li>
-                    <li>{description}</li>
-                    <li>tokenId={tokenId}</li>
-                    <li>owner={addressTrim}</li>
-                    <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
-                        value={price} onChange={(e) => setPrice(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}/>}</li>
-                    <li><Button variant="contained" onClick={fetchListing}>Start listing</Button></li>
-                </ul>
+                    <ul className='ul'>
+                        <li>{name}</li>
+                        <li>{description}</li>
+                        <li>tokenId={tokenId}</li>
+                        <li>owner={addressTrim}</li>
+                    </ul>
+                    {listed.includes(listingId) ?
+                        <ul className='ul'>
+                            <li className='li'>{<TextField disabled id="outlined-disabled" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={price}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>console.log('APPROVE')}>CONFIRM</Button></li>
+                        </ul> :
+                        <ul className='ul'>
+                            <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={price} onChange={(e) => setPrice(e.target.value)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>setTrigger(true)}>SELL</Button></li>
+                        </ul>                        
+                    }
                 </Grid>
             </Grid>
         </div>
