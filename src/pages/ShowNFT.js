@@ -12,6 +12,11 @@ const ShowNFT = () => {
     const [tx, setTx] = useState('');
     const [listed, setListed] = useState('');
     const [trigger, setTrigger] = useState(false);
+    const [approve, setApprove] = useState(false);
+    const [pending, SetPending] = useState([]);
+    const [tx2, SetTx2] = useState(null);
+    // const [loading, setLoading] = useState(false);
+    // const [success, setSuccess] = useState(false);
 
     let location = useLocation();
     const {name} = location.state.name;
@@ -65,7 +70,6 @@ const ShowNFT = () => {
                 })
                 .then(response => response.json())
                 .then(data => setListing(data.data))
-                .then(setTrigger(false))
         }
     trigger && fetchListing();
     }, [trigger])
@@ -91,6 +95,7 @@ const ShowNFT = () => {
         listing.signatureId && pendingTx();
     }, [listing])
 
+
    useEffect(() => {
     const sendTx = async () => {
         const txConfig = JSON.parse(tx.serializedTransaction);
@@ -105,6 +110,64 @@ const ShowNFT = () => {
     }
     tx.serializedTransaction && sendTx();
    }, [tx])
+
+   const approveURL = `http://localhost:3001/api/approve`;
+    const approveParams = { tokenId: tokenId };
+
+    useEffect(() => {
+        const sendApprove = () => {        
+            fetch(approveURL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(approveParams)
+                })
+                .then(response => response.json())
+                .then(data => SetPending(data.data))
+        }
+    approve && sendApprove();
+    }, [approve])
+
+    useEffect(() => {
+   
+        const pendingTx2 = () => {
+
+            const {signatureId} = pending;
+    
+            fetch(`http://localhost:3001/api/kms2`,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({pending: signatureId})
+                })
+                .then(response => response.json())
+                .then(data => SetTx2(data.data))
+        }
+        pending.signatureId && pendingTx2();
+    }, [pending])
+
+    console.log(tx2);
+
+    useEffect(() => {
+        const sendTx2 = async () => {
+            const tx2Config = JSON.parse(tx2.serializedTransaction);
+            tx2Config.from = address;
+            tx2Config.nonce = undefined;
+            tx2Config.gasPrice = tx2Config.gasPrice ? parseInt(tx2Config.gasPrice).toString(16) : undefined;
+            //console.log(txConfig);
+            console.log(await window.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [tx2Config],
+              }));
+        }
+        tx2!==null && tx2.serializedTransaction && sendTx2();
+       }, [tx2])
 
 
     return (
@@ -121,29 +184,43 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
-                    {listed.includes(listingId) ?
+                    {!listed.includes(listingId) && 
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-disabled" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
-                            <li><Button variant="contained" onClick={()=>console.log('APPROVE')}>CONFIRM</Button></li>
-                        </ul> :
+                            <li><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
+                            {console.log("option1")}
+                        </ul> 
+                    }
+                    {!listed.includes(listingId) && tx2==("Already approved") &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
-                            <li><Button variant="contained" onClick={()=>setTrigger(true)}>SELL</Button></li>
+                            <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
+                            {/* {console.log("option2")} */}
                         </ul>                        
+                    }
+                    {listed.includes(listingId) &&
+                        <ul className='ul'>
+                            <li className='li'>{<TextField disabled id="outlined-disabled" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={price}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>console.log("CANCEL")}>CANCEL</Button></li>
+                            {/* {console.log("option3")} */}
+                        </ul> 
                     }
                 </Grid>
             </Grid>
         </div>
     )
-
 }
 
 export default ShowNFT;
