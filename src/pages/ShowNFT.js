@@ -13,8 +13,13 @@ const ShowNFT = () => {
     const [listed, setListed] = useState('');
     const [trigger, setTrigger] = useState(false);
     const [approve, setApprove] = useState(false);
-    const [pending, SetPending] = useState([]);
-    const [tx2, SetTx2] = useState(null);
+    const [pending, setPending] = useState([]);
+    const [tx2, setTx2] = useState(null);
+    const [approved, setApproved] = useState(null);
+    const [trigger2, setTrigger2] = useState(false);
+    const [cancel, setCancel] = useState([]);
+    const [tx3, setTx3] = useState(null);
+    const [state, setState] = useState([]);
     // const [loading, setLoading] = useState(false);
     // const [success, setSuccess] = useState(false);
 
@@ -34,7 +39,6 @@ const ShowNFT = () => {
     //Initial checking
 
     const initialURL = `http://localhost:3001/api/getListing`;
-    const initialParams = { chain: 'CELO', type: 'INITIATED' };
 
     useEffect(() => {
         fetch(initialURL,
@@ -44,14 +48,27 @@ const ShowNFT = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({initialParams})
+                body: JSON.stringify({type: 'INITIATED'})
             })
             .then(response => response.json())
             .then(data => setListed(data.data))
     }, [])
+
+    useEffect(() => {
+        fetch(initialURL,
+            {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({type: 'CANCELLED'})
+            })
+            .then(response => response.json())
+            .then(data => setState(data.data))
+    }, [listed])
     
-    console.log(listed);
-    console.log(listingId);
+    //Sell operation
     //In this case contractAddress = nftAddress
     const URL = `http://localhost:3001/api/marketplace`;
     const params = { address: address, contractAddress: contractAddress, tokenId: tokenId, price: price, operation: 'sell', listingId: listingId };
@@ -95,14 +112,12 @@ const ShowNFT = () => {
         listing.signatureId && pendingTx();
     }, [listing])
 
-
    useEffect(() => {
     const sendTx = async () => {
         const txConfig = JSON.parse(tx.serializedTransaction);
         txConfig.from = address;
         txConfig.nonce = undefined;
         txConfig.gasPrice = txConfig.gasPrice ? parseInt(txConfig.gasPrice).toString(16) : undefined;
-        //console.log(txConfig);
         console.log(await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [txConfig],
@@ -111,7 +126,9 @@ const ShowNFT = () => {
     tx.serializedTransaction && sendTx();
    }, [tx])
 
-   const approveURL = `http://localhost:3001/api/approve`;
+   //Approval operation
+
+    const approveURL = `http://localhost:3001/api/approve`;
     const approveParams = { tokenId: tokenId };
 
     useEffect(() => {
@@ -126,7 +143,7 @@ const ShowNFT = () => {
                     body: JSON.stringify(approveParams)
                 })
                 .then(response => response.json())
-                .then(data => SetPending(data.data))
+                .then(data => setPending(data.data))
         }
     approve && sendApprove();
     }, [approve])
@@ -137,22 +154,20 @@ const ShowNFT = () => {
 
             const {signatureId} = pending;
     
-            fetch(`http://localhost:3001/api/kms2`,
+            fetch(`http://localhost:3001/api/kms`,
                 {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({pending: signatureId})
+                    body: JSON.stringify({listing: signatureId})
                 })
                 .then(response => response.json())
-                .then(data => SetTx2(data.data))
+                .then(data => setTx2(data.data))
         }
         pending.signatureId && pendingTx2();
     }, [pending])
-
-    console.log(tx2);
 
     useEffect(() => {
         const sendTx2 = async () => {
@@ -160,15 +175,72 @@ const ShowNFT = () => {
             tx2Config.from = address;
             tx2Config.nonce = undefined;
             tx2Config.gasPrice = tx2Config.gasPrice ? parseInt(tx2Config.gasPrice).toString(16) : undefined;
-            //console.log(txConfig);
-            console.log(await window.ethereum.request({
+            const approved = await window.ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [tx2Config],
-              }));
+              })
+            approved!==null && setApproved(approved);
         }
         tx2!==null && tx2.serializedTransaction && sendTx2();
        }, [tx2])
 
+    //Cancel operation
+
+    const cancelURL = `http://localhost:3001/api/marketplace2`;
+    const cancelParams = { operation: 'cancel', listingId: listingId };
+
+    useEffect(() => {
+        const cancelListing = () => {
+        
+            fetch(cancelURL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cancelParams)
+                })
+                .then(response => response.json())
+                .then(data => setCancel(data.data))
+        }
+    trigger2 && cancelListing();
+    }, [trigger2])
+
+    useEffect(() => {
+   
+        const pendingTx3 = () => {
+
+            const {signatureId} = cancel;
+    
+            fetch(`http://localhost:3001/api/kms`,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({listing: signatureId})
+                })
+                .then(response => response.json())
+                .then(data => setTx3(data.data))
+        }
+        cancel.signatureId && pendingTx3();
+    }, [cancel])
+
+    useEffect(() => {
+        const sendTx3 = async () => {
+            const tx3Config = JSON.parse(tx3.serializedTransaction);
+            tx3Config.from = address;
+            tx3Config.nonce = undefined;
+            tx3Config.gasPrice = tx3Config.gasPrice ? parseInt(tx3Config.gasPrice).toString(16) : undefined;
+            console.log(await window.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [tx3Config],
+              }))
+        }
+        tx3!==null && tx3.serializedTransaction && sendTx3();
+       }, [tx3])
 
     return (
         <div>
@@ -184,18 +256,12 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
-                    {!listed.includes(listingId) && 
+                    {!listed.includes(listingId) && !approved &&
                         <ul className='ul'>
-                            <li className='li'>{<TextField disabled id="outlined-disabled" label="PRICE" variant="outlined" helperText="$CELO" type="number"
-                                value={price}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}/>}</li>
-                            <li><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
-                            {console.log("option1")}
+                            <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {!listed.includes(listingId) && tx2==("Already approved") &&
+                    {!listed.includes(listingId) && approved &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
@@ -203,19 +269,27 @@ const ShowNFT = () => {
                                     shrink: true,
                                 }}/>}</li>
                             <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
-                            {/* {console.log("option2")} */}
                         </ul>                        
                     }
-                    {listed.includes(listingId) &&
+                    {listed.includes(listingId) && !state.includes(listingId) &&
                         <ul className='ul'>
-                            <li className='li'>{<TextField disabled id="outlined-disabled" label="PRICE" variant="outlined" helperText="$CELO" type="number"
-                                value={price}
+                            <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
+                        </ul>
+                    }
+                    {listed.includes(listingId) && !approved && state.includes(listingId) &&
+                        <ul className='ul'>
+                            <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
+                        </ul> 
+                    }
+                    {listed.includes(listingId) && approved && state.includes(listingId) &&
+                        <ul className='ul'>
+                            <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={price} onChange={(e) => setPrice(e.target.value)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
-                            <li><Button variant="contained" onClick={()=>console.log("CANCEL")}>CANCEL</Button></li>
-                            {/* {console.log("option3")} */}
-                        </ul> 
+                            <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
+                        </ul>                        
                     }
                 </Grid>
             </Grid>
