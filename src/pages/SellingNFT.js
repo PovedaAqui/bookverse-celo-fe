@@ -48,7 +48,7 @@ const SellingNFT = () => {
         listingId!==null && listingId.length>0 && getInitiated()
     }, [listingId])
 
-    //console.log(initiated);
+    console.log(initiated);
 
     useEffect(() => {
        
@@ -66,10 +66,10 @@ const SellingNFT = () => {
                 .then(response => response.json())
                 .then(data => setMetadata(data.data))
             }
-            tokenId!==undefined && nftAddress!==undefined && getMetadata();             
+            //tokenId!==undefined && nftAddress!==undefined && getMetadata();             
     }, [initiated])
     
-    console.log(metadata);
+    //console.log(metadata);
 
     return (
         <div>
