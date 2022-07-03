@@ -6,6 +6,7 @@ const SellingNFT = () => {
     const [initiated, setInitiated] = useState([]);
     const [listingId, setListingId] = useState([]);
     const [metadata, setMetadata] = useState([]);
+    const [fetchInitiated, setFetchInitiated] = useState(true);
     
 
     const initialURL = `http://localhost:3001/api/getListing`;
@@ -31,6 +32,7 @@ const SellingNFT = () => {
     //console.log(listingId);
 
     useEffect(() => {
+        let arrayInitiated = [];
         const getInitiated = () => {
             listingId.map(data => {
                 fetch(getInitiatedURL,
@@ -43,9 +45,11 @@ const SellingNFT = () => {
                         body: JSON.stringify({id: data})
                     })
                 .then(response => response.json())
-                .then(data => setInitiated(data.data))
+                .then(data => arrayInitiated.push(data.data))
+                .then(data2 => data2>=listingId.length && setInitiated(arrayInitiated))
+                .then(setFetchInitiated(false))
         })}
-        listingId!==null && listingId.length>0 && getInitiated()
+        fetchInitiated && listingId!==null && listingId.length>0 && getInitiated()
     }, [listingId])
 
     console.log(initiated);
