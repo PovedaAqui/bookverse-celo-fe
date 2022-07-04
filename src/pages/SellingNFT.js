@@ -7,6 +7,8 @@ const SellingNFT = () => {
     const [listingId, setListingId] = useState([]);
     const [metadata, setMetadata] = useState([]);
     const [fetchInitiated, setFetchInitiated] = useState(true);
+    const [fetchMetadata, setFetchMetadata] = useState(true);
+    const [fetchListing, setFetchListing] = useState(true);
     
 
     const initialURL = `http://localhost:3001/api/getListing`;
@@ -14,19 +16,23 @@ const SellingNFT = () => {
     const metadataURL = `http://localhost:3001/api/getMetadata`;
 
     useEffect(() => {
-        fetch(initialURL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({type: 'INITIATED'})
-            })
-            .then(response => response.json())
-            .then(data => setListingId((data.data).map(data2 => {
-                return data2;
-            })))
+        const getListing = () =>{
+            fetch(initialURL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({type: 'INITIATED'})
+                })
+                .then(response => response.json())
+                .then(data => setListingId((data.data).map(data2 => {
+                    return data2;
+                })))
+                .then(setFetchListing(false))
+        }
+        fetchListing && getListing()
     }, [])
 
     //console.log(listingId);
@@ -52,28 +58,30 @@ const SellingNFT = () => {
         fetchInitiated && listingId!==null && listingId.length>0 && getInitiated()
     }, [listingId])
 
-    console.log(initiated);
+    //console.log(initiated);
 
     useEffect(() => {
-       
-            const {nftAddress, tokenId} = initiated;
+            let arrayMetadata = [];
             const getMetadata = () => {    
-                fetch(metadataURL,
-                    {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({nftAddress: nftAddress, tokenId: tokenId})
-                    })
-                .then(response => response.json())
-                .then(data => setMetadata(data.data))
-            }
-            //tokenId!==undefined && nftAddress!==undefined && getMetadata();             
+                initiated.map(data => {
+                    fetch(metadataURL,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({nftAddress: data.nftAddress, tokenId: data.tokenId})
+                        })
+                    .then(response => response.json())
+                    .then(data => arrayMetadata.push(data.data))
+                    .then(data2 => data2>=initiated.length && setMetadata(arrayMetadata))
+                    .then(setFetchMetadata(false))                  
+                })}
+                fetchMetadata && initiated!==null && initiated.length>0 && getMetadata()
     }, [initiated])
     
-    //console.log(metadata);
+    console.log(metadata);
 
     return (
         <div>
