@@ -6,9 +6,11 @@ const SellingNFT = () => {
     const [initiated, setInitiated] = useState([]);
     const [listingId, setListingId] = useState([]);
     const [metadata, setMetadata] = useState([]);
+    const [ipfs, setIPFS] = useState([]);
     const [fetchInitiated, setFetchInitiated] = useState(true);
     const [fetchMetadata, setFetchMetadata] = useState(true);
     const [fetchListing, setFetchListing] = useState(true);
+    const [fetchIPFS, setFetchIPFS] = useState(true);
     
 
     const initialURL = `http://localhost:3001/api/getListing`;
@@ -75,13 +77,37 @@ const SellingNFT = () => {
                         })
                     .then(response => response.json())
                     .then(data => arrayMetadata.push(data.data))
-                    .then(data2 => data2>=initiated.length && setMetadata(arrayMetadata))
+                    .then(data2 => data2>=initiated.length && arrayMetadata.map(data => data.data.replace("ipfs://", "https://ipfs.io/ipfs/")))
+                    .then(data3 => data3.length>=initiated.length && setMetadata(data3))
                     .then(setFetchMetadata(false))                  
                 })}
                 fetchMetadata && initiated!==null && initiated.length>0 && getMetadata()
     }, [initiated])
     
-    console.log(metadata);
+    //console.log(metadata);
+
+    useEffect(() => {
+        let arrayIPFS = [];
+        const getIPFS = () => {    
+            metadata.map(data => {
+                fetch(data)
+                .then(response => response.json())
+                .then(data => arrayIPFS.push(data))
+                .then(data2 => data2>=metadata.length && arrayIPFS.map(data => data.image.replace("ipfs://", "https://ipfs.io/ipfs/")))
+                .then(data3 => data3.length>=metadata.length && arrayIPFS.push(data3))
+                .then(data4 => data4>=metadata.length && setIPFS(arrayIPFS))
+                .then(setFetchIPFS(false))                  
+            })}
+            fetchIPFS && metadata!==null && metadata.length>0 && getIPFS()
+}, [metadata])
+
+    console.log(ipfs);
+
+//     if(image!==null && image.includes("ipfs://")) {
+//     url = image.replace("ipfs://", "https://ipfs.io/ipfs/")
+//   } else {
+//     return image;
+//   }
 
     return (
         <div>
