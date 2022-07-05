@@ -29,12 +29,12 @@ const SellingNFT = () => {
                     body: JSON.stringify({type: 'INITIATED'})
                 })
                 .then(response => response.json())
-                .then(data => setListingId((data.data).map(data2 => {
+                .then(data => data.data.length>0 && setListingId((data.data).map(data2 => {
                     return data2;
                 })))
                 .then(setFetchListing(false))
         }
-        fetchListing && getListing()
+        fetchListing && !listingId.length && getListing()
     }, [])
 
     //console.log(listingId);
@@ -57,7 +57,7 @@ const SellingNFT = () => {
                 .then(data2 => data2>=listingId.length && setInitiated(arrayInitiated))
                 .then(setFetchInitiated(false))
         })}
-        fetchInitiated && listingId!==null && listingId.length>0 && getInitiated()
+        fetchInitiated && listingId!==null && listingId.length>0 && initiated.length==0 && getInitiated()
     }, [listingId])
 
     //console.log(initiated);
@@ -81,7 +81,7 @@ const SellingNFT = () => {
                     .then(data3 => data3.length>=initiated.length && setMetadata(data3))
                     .then(setFetchMetadata(false))                  
                 })}
-                fetchMetadata && initiated!==null && initiated.length>0 && getMetadata()
+                fetchMetadata && initiated!==null && initiated.length>=listingId.length && getMetadata()
     }, [initiated])
     
     //console.log(metadata);
@@ -93,8 +93,8 @@ const SellingNFT = () => {
                 fetch(data)
                 .then(response => response.json())
                 .then(data => arrayIPFS.push(data))
-                .then(data2 => data2>=metadata.length && arrayIPFS.map(data => data.image.replace("ipfs://", "https://ipfs.io/ipfs/")))
-                .then(data3 => data3.length>=metadata.length && arrayIPFS.push(data3))
+                //.then(data2 => data2>=metadata.length && arrayIPFS.map(data => data.image.replace("ipfs://", "https://ipfs.io/ipfs/")))
+                //.then(data3 => data3.length>=metadata.length && arrayIPFS.push(data3))
                 .then(data4 => data4>=metadata.length && setIPFS(arrayIPFS))
                 .then(setFetchIPFS(false))                  
             })}
