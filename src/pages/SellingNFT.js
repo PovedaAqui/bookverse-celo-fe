@@ -1,5 +1,7 @@
+import { Grid } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
+import ActionAreaCard from "../components/ActionAreaCard";
 
 const SellingNFT = () => {
 
@@ -60,7 +62,7 @@ const SellingNFT = () => {
         fetchInitiated && listingId!==null && listingId.length>0 && initiated.length==0 && getInitiated()
     }, [listingId])
 
-    //console.log(initiated);
+   //console.log(initiated);
 
     useEffect(() => {
             let arrayMetadata = [];
@@ -101,16 +103,23 @@ const SellingNFT = () => {
             fetchIPFS && metadata!==null && metadata.length>0 && getIPFS()
 }, [metadata])
 
-    console.log(ipfs);
-
-//     if(image!==null && image.includes("ipfs://")) {
-//     url = image.replace("ipfs://", "https://ipfs.io/ipfs/")
-//   } else {
-//     return image;
-//   }
+    //console.log(ipfs);
 
     return (
         <div>
+            <Grid container>
+                {metadata!=undefined && metadata!=null && ipfs.map(({name, description, image}, i1)=>
+                    {return initiated.map(({tokenId}, i2)=>{
+                        if(i1===i2){
+                            return (
+                                <div key={i2}>
+                                    {<Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId}/></Grid>}
+                                </div>
+                            )
+                        }
+                    })               
+                })}
+            </Grid>
         </div>
     )
 }
