@@ -61,7 +61,7 @@ const App = () => {
                     <Routes>
                         <Route path='/' element={walletAddress.length>0 && <MyBooks address={walletAddress}/>} />
                         <Route path='/shownft' element={<ShowNFT/>} />
-                        <Route path='/sellingnft' element={<SellingNFT/>} />
+                        <Route path='/sellingnft' element={walletAddress.length>0 && <SellingNFT address={walletAddress}/>} />
                     </Routes>
                 </div>
             </div>

@@ -8,10 +8,10 @@ import { Link} from 'react-router-dom';
 
 export default function ActionAreaCard({...props}) {
 
-  const { name, description, image, tokenId, contractAddress, address, listingId} = props;
+  const { name, description, image, tokenId, contractAddress, address, listingId, seller, listedPrice} = props;
   let url = "";
 
-  console.log(tokenId);
+  //console.log(price);
 
   if(image!==null && image.includes("ipfs://")) {
     url = image.replace("ipfs://", "https://ipfs.io/ipfs/")
@@ -20,7 +20,7 @@ export default function ActionAreaCard({...props}) {
   }
 
   const params = {'name': {name}, 'description': {description}, 'image': {url}, 'tokenId': {tokenId}, 'contractAddress': {contractAddress}, 'address': {address},
-'listingId': {listingId}}
+'listingId': {listingId}, 'seller': {seller}, 'listedPrice': {listedPrice}}
 
 
   return (

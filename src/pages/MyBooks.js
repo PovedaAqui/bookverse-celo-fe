@@ -25,6 +25,8 @@ const MyBooks = ({address}) => {
               return data2;
             })))
     }, [])
+
+    //console.log(metadata);
     
     return(
       <div>

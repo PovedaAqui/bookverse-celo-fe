@@ -20,6 +20,7 @@ const ShowNFT = () => {
     const [cancel, setCancel] = useState([]);
     const [tx3, setTx3] = useState(null);
     const [state, setState] = useState([]);
+    const [trigger3, setTrigger3] = useState(false);
     // const [loading, setLoading] = useState(false);
     // const [success, setSuccess] = useState(false);
 
@@ -31,6 +32,10 @@ const ShowNFT = () => {
     const {contractAddress} = location.state.contractAddress;
     const {address} = location.state.address;
     const {listingId} = location.state.listingId;
+    const {seller} = location.state.seller;
+    let {listedPrice} = location.state.listedPrice;
+
+    // console.log(address);
 
     const addressTrim = (
         address.substring(0, 5) + '…' + address.substring(address.length - 4)
@@ -53,6 +58,8 @@ const ShowNFT = () => {
             .then(response => response.json())
             .then(data => setListed(data.data))
     }, [])
+
+    //console.log(listed);
 
     useEffect(() => {
         fetch(initialURL,
@@ -256,6 +263,16 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
+                    {seller!=undefined && address!=undefined && address!=null && address==seller &&
+                        <ul className='ul'>
+                            <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={listedPrice = (Number(listedPrice)+0.015)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>setTrigger3(true)}>BUY</Button></li>
+                        </ul>                        
+                    }
                     {!listed.includes(listingId) && !approved &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>

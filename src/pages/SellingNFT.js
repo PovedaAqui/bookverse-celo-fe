@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import ActionAreaCard from "../components/ActionAreaCard";
 
-const SellingNFT = () => {
+const SellingNFT = ({address}) => {
 
     const [initiated, setInitiated] = useState([]);
     const [listingId, setListingId] = useState([]);
@@ -95,8 +95,6 @@ const SellingNFT = () => {
                 fetch(data)
                 .then(response => response.json())
                 .then(data => arrayIPFS.push(data))
-                //.then(data2 => data2>=metadata.length && arrayIPFS.map(data => data.image.replace("ipfs://", "https://ipfs.io/ipfs/")))
-                //.then(data3 => data3.length>=metadata.length && arrayIPFS.push(data3))
                 .then(data4 => data4>=metadata.length && setIPFS(arrayIPFS))
                 .then(setFetchIPFS(false))                  
             })}
@@ -109,11 +107,11 @@ const SellingNFT = () => {
         <div>
             <Grid container>
                 {metadata!=undefined && metadata!=null && ipfs.map(({name, description, image}, i1)=>
-                    {return initiated.map(({tokenId}, i2)=>{
-                        if(i1===i2){
+                    {return initiated.map(({tokenId, seller, price}, i2)=>{
+                        if(i1==i2){
                             return (
                                 <div key={i2}>
-                                    {<Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId}/></Grid>}
+                                    {<Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId} address={address} seller={seller} listedPrice={price} listingId={(name + tokenId).replace(/ /g, '')}/></Grid>}
                                 </div>
                             )
                         }
