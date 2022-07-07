@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
 import ActionAreaCard from "../components/ActionAreaCard";
+import _ from "lodash";
 
 const SellingNFT = ({address}) => {
 
@@ -19,7 +20,16 @@ const SellingNFT = ({address}) => {
     const getInitiatedURL = `http://localhost:3001/api/getInitiated`;
     const metadataURL = `http://localhost:3001/api/getMetadata`;
 
+    const timeOut = (t) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(`Completed in ${t}`)
+          }, t)
+        })
+      }
+
     useEffect(() => {
+        let arrayListing = [];
         const getListing = () =>{
             fetch(initialURL,
                 {
@@ -31,12 +41,11 @@ const SellingNFT = ({address}) => {
                     body: JSON.stringify({type: 'INITIATED'})
                 })
                 .then(response => response.json())
-                .then(data => data.data.length>0 && setListingId((data.data).map(data2 => {
-                    return data2;
-                })))
+                .then(data => data.data.length>0 && arrayListing.concat(data.data))
+                .then(data2 => setListingId(data2.sort()))
                 .then(setFetchListing(false))
         }
-        fetchListing && !listingId.length && getListing()
+        fetchListing && listingId!==null && getListing()
     }, [])
 
     //console.log(listingId);
@@ -56,14 +65,16 @@ const SellingNFT = ({address}) => {
                     })
                 .then(response => response.json())
                 .then(data => arrayInitiated.push(data.data))
-                .then(data2 => data2===listingId.length && setInitiated(arrayInitiated))
+                .then(data2 => data2===listingId.length && arrayInitiated.map(data => data))
+                .then(data3 => data3.length===listingId.length && setInitiated(data3))
                 .then(setFetchInitiated(false))
         })}
         fetchInitiated && listingId!==null && listingId.length>0 && initiated.length==0 && getInitiated()
     }, [listingId])
 
-   //console.log(initiated);
+   console.log(initiated);
 
+   //Pending to implement listingId mapping
     useEffect(() => {
             let arrayMetadata = [];
             const getMetadata = () => {    
@@ -85,7 +96,7 @@ const SellingNFT = ({address}) => {
                 })}
                 fetchMetadata && initiated!==null && initiated.length>=listingId.length && getMetadata()
     }, [initiated])
-    
+
     //console.log(metadata);
 
     useEffect(() => {
@@ -106,15 +117,19 @@ const SellingNFT = ({address}) => {
     return (
         <div>
             <Grid container>
-                {ipfs.length===metadata.length && ipfs.map(({name, description, image}, i1)=>
+                {ipfs.length===metadata.length && initiated.length===ipfs.length && ipfs.map(({name, description, image}, i1)=>
                 {
-                    return initiated.map(({tokenId, seller, price}, i2)=>{
+                    return initiated.map(({tokenId, listingId}, i2) =>{
                         if(i1===i2){
-                            return (
+                            let findName = _.find(listingId, { 'listingId': (name + tokenId).replace(/ /g, '')})
+                            console.log(findName)
+                            if (findName!=undefined) {
+                                return(
                                 <div key={i2}>
-                                    {<Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId} address={address} seller={seller} listedPrice={price} listingId={(name + tokenId).replace(/ /g, '')}/></Grid>}
+                                    <Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={findName.tokenId} address={address} seller={findName.seller} listedPrice={findName.price} listingId={findName.listingId}/></Grid>
                                 </div>
-                            )
+                                )
+                            }    
                         }
                     })                 
                 })}

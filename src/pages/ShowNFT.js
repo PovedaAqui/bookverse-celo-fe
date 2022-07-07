@@ -35,8 +35,6 @@ const ShowNFT = () => {
     const {seller} = location.state.seller;
     let {listedPrice} = location.state.listedPrice;
 
-    // console.log(address);
-
     const addressTrim = (
         address.substring(0, 5) + '…' + address.substring(address.length - 4)
     );
@@ -263,7 +261,7 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
-                    {seller!=undefined && address!=undefined && address!=null && address==seller &&
+                    {seller!=undefined && address!=undefined && address!=null && address!=seller &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={listedPrice = (Number(listedPrice)+0.015)}
@@ -273,7 +271,7 @@ const ShowNFT = () => {
                             <li><Button variant="contained" onClick={()=>setTrigger3(true)}>BUY</Button></li>
                         </ul>                        
                     }
-                    {!listed.includes(listingId) && !approved &&
+                    {!listed.includes(listingId) && !approved && address===seller &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
@@ -288,17 +286,17 @@ const ShowNFT = () => {
                             <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {listed.includes(listingId) && !state.includes(listingId) &&
+                    {listed.includes(listingId) && !state.includes(listingId) && address===seller &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
                     }
-                    {listed.includes(listingId) && !approved && state.includes(listingId) &&
+                    {listed.includes(listingId) && !approved && state.includes(listingId) && address===seller &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {listed.includes(listingId) && approved && state.includes(listingId) &&
+                    {listed.includes(listingId) && approved && state.includes(listingId) && address===seller &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
