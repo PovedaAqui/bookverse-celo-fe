@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
 import ActionAreaCard from "../components/ActionAreaCard";
-import _ from "lodash";
+import _, { reject } from "lodash";
 
 const SellingNFT = ({address}) => {
 
@@ -51,8 +51,8 @@ const SellingNFT = ({address}) => {
                 const result = await getInit.json();
                 return result.data;
         })
-        const arrayInitiated = await Promise.all(response);
-        //console.log(arrayInitiated);
+        const result = await response.json();
+        return result;
     }
             
     const getMetadata = async () => { 
@@ -83,10 +83,9 @@ const SellingNFT = ({address}) => {
     })}
 
     useEffect(() => {
-        Promise.all([getListing()], getInitiated(), getMetadata()).then(result => {
+        Promise.all([getListing()], getInitiated()).then(result => {
             setListingId(result[0]);
             setInitiated(result[1]);
-            setMetadata(result[2]);
             console.log(initiated);
         });
     }, [])
