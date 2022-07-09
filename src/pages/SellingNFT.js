@@ -2,7 +2,6 @@ import { Grid } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
 import ActionAreaCard from "../components/ActionAreaCard";
-import _, { reject } from "lodash";
 
 const SellingNFT = ({address}) => {
 
@@ -14,14 +13,6 @@ const SellingNFT = ({address}) => {
     const initialURL = `http://localhost:3001/api/getListing`;
     const getInitiatedURL = `http://localhost:3001/api/getInitiated`;
     const metadataURL = `http://localhost:3001/api/getMetadata`;
-
-    const timeOut = (t) => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve(`Completed in ${t}`)
-          }, t)
-        })
-      }
         
     const getListing = async () => {
         const response = await fetch(initialURL,
@@ -56,7 +47,6 @@ const SellingNFT = ({address}) => {
     }
             
     const getMetadata = async () => { 
-        let arrayMeta = [];
         const response = initiated.map(async ({nftAddress, tokenId}) => {
             const getMeta = await fetch(metadataURL,
                 {
@@ -74,28 +64,41 @@ const SellingNFT = ({address}) => {
         return result.map(({data}) => data.replace("ipfs://", "https://ipfs.io/ipfs/"));
     }    
     
-    const getIPFS = () => {
-        let arrayIPFS = [];    
-        metadata.map(data => {
-            fetch(data)
-            .then(response => response.json())
-            .then(data => arrayIPFS.push(data))
-            .then(data4 => data4===metadata.length && setIPFS(arrayIPFS))              
-    })}
+    const getIPFS = async () => {
+        const response = metadata.map(async (data) => {
+            const getData = await fetch(data)
+            const result = await getData.json();
+            return result;           
+        })
+        const result = await Promise.all(response)
+        return result;
+    }
 
     useEffect(() => {
-        Promise.all([getListing(), getInitiated(), getMetadata()]).then(result => {
+        Promise.all([getListing(), getInitiated(), getMetadata(), getIPFS()]).then(result => {
             setListingId(result[0])
             setInitiated(result[1])
             setMetadata(result[2])
-            console.log(metadata)
+            setIPFS(result[3])
         });
     }, [])
 
     return (
         <div>
             <Grid container>
-                {null}
+                {ipfs.length!=0 && ipfs.map(({name, description, image}, i1)=>
+                    {
+                        return initiated.map(({tokenId, listingId, seller, price}, i2) =>{
+                            if(i1===i2){
+                                return(
+                                    <div key={i2}>
+                                        <Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId} address={address} seller={seller} listedPrice={price} listingId={listingId}/></Grid>
+                                    </div>
+                                )
+                                    
+                            }
+                        })                 
+                    })}
             </Grid>
         </div>
     )
