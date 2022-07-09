@@ -56,8 +56,8 @@ const SellingNFT = ({address}) => {
     }
             
     const getMetadata = async () => { 
+        let arrayMeta = [];
         const response = initiated.map(async ({nftAddress, tokenId}) => {
-            let arrayMetadata = [];
             const getMeta = await fetch(metadataURL,
                 {
                     method: 'POST',
@@ -68,12 +68,10 @@ const SellingNFT = ({address}) => {
                     body: JSON.stringify({nftAddress: nftAddress, tokenId: tokenId})
                 })
                 const result = await getMeta.json();
-                //console.log(result);
                 return result.data;
         })
-        const result = await Promise.all(response);
-        //console.log(result);    
-        return result;
+        const result = await Promise.all(response)
+        return result.map(({data}) => data.replace("ipfs://", "https://ipfs.io/ipfs/"));
     }    
     
     const getIPFS = () => {
@@ -87,10 +85,10 @@ const SellingNFT = ({address}) => {
 
     useEffect(() => {
         Promise.all([getListing(), getInitiated(), getMetadata()]).then(result => {
-            setListingId(result[0]);
-            setInitiated(result[1]);
-            setMetadata(result[2]);
-            console.log(metadata);
+            setListingId(result[0])
+            setInitiated(result[1])
+            setMetadata(result[2])
+            console.log(metadata)
         });
     }, [])
 
