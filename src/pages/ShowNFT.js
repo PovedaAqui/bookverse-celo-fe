@@ -75,8 +75,6 @@ const ShowNFT = () => {
         }
     }, [])
 
-    //console.log(listed);
-
     useEffect(() => {
         try {
             fetch(initialURL,
@@ -218,10 +216,10 @@ const ShowNFT = () => {
                     tx2Config.from = address;
                     tx2Config.nonce = undefined;
                     tx2Config.gasPrice = tx2Config.gasPrice ? parseInt(tx2Config.gasPrice).toString(16) : undefined;
-                    const approved = await window.ethereum.request({
+                    const approved = console.log(await window.ethereum.request({
                         method: 'eth_sendTransaction',
                         params: [tx2Config],
-                    })
+                    }))
                     approved!==null && setApproved(approved);
             } catch (error) {
                 console.log(error) 
@@ -419,10 +417,10 @@ useEffect(() => {
             tx5Config.from = address;
             tx5Config.nonce = undefined;
             tx5Config.gasPrice = tx5Config.gasPrice ? parseInt(tx5Config.gasPrice).toString(16) : undefined;
-            const approved = await window.ethereum.request({
+            const approved = console.log(await window.ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [tx5Config],
-            })
+            }))
             approved2!==null && setApproved2(approved);
     } catch (error) {
         console.log(error) 
