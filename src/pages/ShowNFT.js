@@ -220,7 +220,7 @@ const ShowNFT = () => {
                         method: 'eth_sendTransaction',
                         params: [tx2Config],
                     }))
-                    approved!==null && setApproved(approved);
+                    approved!==null && setApproved("approved");
             } catch (error) {
                 console.log(error) 
              }  
@@ -361,7 +361,7 @@ trigger3 && buyNFT();
     tx4!==null && tx4.serializedTransaction && sendTx4();
    }, [tx4])
 
-   //Aprovval 2 operation
+   //Approval 2 operation
 
     const approve2URL = `http://localhost:3001/api/approve2`;
     const sendPrice2 = (Number(listedPrice)+0.15)
@@ -421,7 +421,7 @@ useEffect(() => {
                 method: 'eth_sendTransaction',
                 params: [tx5Config],
             }))
-            approved2!==null && setApproved2(approved);
+            approved2!==null && setApproved2("approved");
     } catch (error) {
         console.log(error) 
      }  
