@@ -78,15 +78,6 @@ export default function SearchAppBar({title, ...props}) {
           >
             {title}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
 
           <Button id={data.id} color={data.color} variant={data.variant} href="#contained-buttons" onClick={data.handle}>
           {data.colorIcon ? <LogoutIcon color={data.colorIcon} /> : null}
