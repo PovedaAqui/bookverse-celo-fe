@@ -164,7 +164,7 @@ const ShowNFT = () => {
    //Approval operation
 
     const approveURL = `http://localhost:3001/api/approve`;
-    const approveParams = { tokenId: tokenId, spender: address };
+    const approveParams = { tokenId: tokenId };
 
     useEffect(() => {
             const sendApprove = () => {   
