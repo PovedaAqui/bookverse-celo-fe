@@ -21,6 +21,12 @@ const ShowNFT = () => {
     const [tx3, setTx3] = useState(null);
     const [state, setState] = useState([]);
     const [trigger3, setTrigger3] = useState(false);
+    const [buy, setBuy] = useState([]);
+    const [tx4, setTx4] = useState(null);
+    const [pending2, setPending2] = useState([]);
+    const [approve2, setApprove2] = useState(false);
+    const [approved2, setApproved2] = useState(null);
+    const [tx5, setTx5] = useState(null);
     // const [loading, setLoading] = useState(false);
     // const [success, setSuccess] = useState(false);
 
@@ -35,8 +41,6 @@ const ShowNFT = () => {
     const {seller} = location.state.seller;
     let {listedPrice} = location.state.listedPrice;
 
-    console.log(seller);
-    console.log(address);
 
     // let filterSeller = '';
     // if (seller===undefined) {
@@ -162,7 +166,7 @@ const ShowNFT = () => {
    //Approval operation
 
     const approveURL = `http://localhost:3001/api/approve`;
-    const approveParams = { tokenId: tokenId };
+    const approveParams = { tokenId: tokenId, spender: address };
 
     useEffect(() => {
             const sendApprove = () => {   
@@ -295,7 +299,137 @@ const ShowNFT = () => {
     //Buy operation
 
     const buyURL = `http://localhost:3001/api/marketplace3`;
-    const buyParams = { operation: 'buy', listingId: listingId, buyer: address };
+    const sendPrice = (Number(listedPrice)+0.015)
+    const buyParams = { operation: 'buy', listingId: listingId, buyer: address, price: sendPrice };
+
+    useEffect(() => {
+        const buyNFT = () => {
+            try {
+                fetch(buyURL,
+                    {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(buyParams)
+                    })
+                    .then(response => response.json())
+                    .then(data => setBuy(data.data))
+            } catch (error) {
+                console.log(error)
+            }
+        }
+trigger3 && buyNFT();
+}, [trigger3])
+
+    useEffect(() => {
+        const pendingTx4 = () => {
+            try {
+                const {signatureId} = buy;
+                fetch(`http://localhost:3001/api/kms`,
+                    {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({listing: signatureId})
+                    })
+                    .then(response => response.json())
+                    .then(data => setTx4(data.data))
+            } catch (error) {
+                console.log(error) 
+            }
+        }  
+    buy.signatureId && pendingTx4();
+    }, [buy])
+
+    useEffect(() => {
+        const sendTx4 = async () => {
+            try {
+                const tx4Config = JSON.parse(tx4.serializedTransaction);
+                tx4Config.from = address;
+                tx4Config.nonce = undefined;
+                tx4Config.gasPrice = tx4Config.gasPrice ? parseInt(tx4Config.gasPrice).toString(16) : undefined;
+                console.log(await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [tx4Config],
+                }))
+            } catch (error) {
+                console.log(error) 
+            }
+        }
+    tx4!==null && tx4.serializedTransaction && sendTx4();
+   }, [tx4])
+
+   //Aprovval 2 operation
+
+    const approve2URL = `http://localhost:3001/api/approve2`;
+    const sendPrice2 = (Number(listedPrice)+0.15)
+    const approve2Params = { spender: address, amount: sendPrice2 };
+
+    useEffect(() => {
+        const sendApprove2 = () => {   
+            try {     
+                fetch(approve2URL,
+                    {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(approve2Params)
+                    })
+                    .then(response => response.json())
+                    .then(data => setPending2(data.data))
+            } catch (error) {
+                console.log(error)
+            }
+        }
+approve2 && sendApprove2();
+}, [approve2])
+
+useEffect(() => {
+    const pendingTx5 = () => {
+        try {
+            const {signatureId} = pending2;
+            fetch(`http://localhost:3001/api/kms`,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({listing: signatureId})
+                })
+                .then(response => response.json())
+                .then(data => setTx5(data.data))
+        } catch (error) {
+            console.log(error)
+        } 
+    } 
+pending2.signatureId && pendingTx5();
+}, [pending2])
+
+useEffect(() => {
+    const sendTx5 = async () => {
+        try {
+            const tx5Config = JSON.parse(tx5.serializedTransaction);
+            tx5Config.from = address;
+            tx5Config.nonce = undefined;
+            tx5Config.gasPrice = tx5Config.gasPrice ? parseInt(tx5Config.gasPrice).toString(16) : undefined;
+            const approved = await window.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [tx5Config],
+            })
+            approved2!==null && setApproved2(approved);
+    } catch (error) {
+        console.log(error) 
+     }  
+    } 
+tx5!==null && tx5.serializedTransaction && sendTx5();
+}, [tx5])
 
     return (
         <div>
@@ -311,14 +445,24 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
-                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller &&
+                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && !approve2 &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={listedPrice = (Number(listedPrice)+0.015)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
-                            <li><Button variant="contained" onClick={()=>setTrigger3(true)}>BUY</Button></li>
+                            <li><Button variant="contained" onClick={()=>setApprove2(true)}>BUY</Button></li>
+                        </ul>                        
+                    }
+                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && approve2 &&
+                        <ul className='ul'>
+                            <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={listedPrice = (Number(listedPrice)+0.015)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>setTrigger3(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
                     {!listed.includes(listingId) && !approved && address===seller &&
