@@ -35,6 +35,16 @@ const ShowNFT = () => {
     const {seller} = location.state.seller;
     let {listedPrice} = location.state.listedPrice;
 
+    console.log(seller);
+    console.log(address);
+
+    // let filterSeller = '';
+    // if (seller===undefined) {
+    //     filterSeller = '0x0000000000000000000000000000000000000000'
+    // } else {
+    //     return seller;
+    // }
+
     const addressTrim = (
         address.substring(0, 5) + '…' + address.substring(address.length - 4)
     );
@@ -44,33 +54,41 @@ const ShowNFT = () => {
     const initialURL = `http://localhost:3001/api/getListing`;
 
     useEffect(() => {
-        fetch(initialURL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({type: 'INITIATED'})
-            })
-            .then(response => response.json())
-            .then(data => setListed(data.data))
+        try {
+            fetch(initialURL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({type: 'INITIATED'})
+                })
+                .then(response => response.json())
+                .then(data => setListed(data.data))
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
 
     //console.log(listed);
 
     useEffect(() => {
-        fetch(initialURL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({type: 'CANCELLED'})
-            })
-            .then(response => response.json())
-            .then(data => setState(data.data))
+        try {
+            fetch(initialURL,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({type: 'CANCELLED'})
+                })
+                .then(response => response.json())
+                .then(data => setState(data.data))
+        } catch (error) {
+            console.log(error)
+        }
     }, [listed])
     
     //Sell operation
@@ -79,55 +97,65 @@ const ShowNFT = () => {
     const params = { address: address, contractAddress: contractAddress, tokenId: tokenId, price: price, operation: 'sell', listingId: listingId };
 
     useEffect(() => {
-        const fetchListing = () => {
-        
-            fetch(URL,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(params)
-                })
-                .then(response => response.json())
-                .then(data => setListing(data.data))
-        }
+            const fetchListing = () => {
+                try {
+                    fetch(URL,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(params)
+                        })
+                        .then(response => response.json())
+                        .then(data => setListing(data.data))
+                } catch (error) {
+                    console.log(error)
+                }
+            } 
     trigger && fetchListing();
     }, [trigger])
 
     useEffect(() => {
-   
-        const pendingTx = () => {
-
-            const {signatureId} = listing;
-    
-            fetch(`http://localhost:3001/api/kms`,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({listing: signatureId})
-                })
-                .then(response => response.json())
-                .then(data => setTx(data.data))
-        }
+            const pendingTx = () => {
+                try {
+                    const {signatureId} = listing;
+            
+                    fetch(`http://localhost:3001/api/kms`,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({listing: signatureId})
+                        })
+                        .then(response => response.json())
+                        .then(data => setTx(data.data))
+                } catch (error) {
+                    console.log(error)
+                }
+            }  
         listing.signatureId && pendingTx();
     }, [listing])
 
    useEffect(() => {
-    const sendTx = async () => {
-        const txConfig = JSON.parse(tx.serializedTransaction);
-        txConfig.from = address;
-        txConfig.nonce = undefined;
-        txConfig.gasPrice = txConfig.gasPrice ? parseInt(txConfig.gasPrice).toString(16) : undefined;
-        console.log(await window.ethereum.request({
-            method: 'eth_sendTransaction',
-            params: [txConfig],
-          }));
-    }
+    
+        const sendTx = async () => {
+            try {
+                const txConfig = JSON.parse(tx.serializedTransaction);
+                txConfig.from = address;
+                txConfig.nonce = undefined;
+                txConfig.gasPrice = txConfig.gasPrice ? parseInt(txConfig.gasPrice).toString(16) : undefined;
+                console.log(await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txConfig],
+                }));
+            } catch (error) {
+                console.log(error)  
+              }
+        }
     tx.serializedTransaction && sendTx();
    }, [tx])
 
@@ -137,55 +165,64 @@ const ShowNFT = () => {
     const approveParams = { tokenId: tokenId };
 
     useEffect(() => {
-        const sendApprove = () => {        
-            fetch(approveURL,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(approveParams)
-                })
-                .then(response => response.json())
-                .then(data => setPending(data.data))
-        }
+            const sendApprove = () => {   
+                try {     
+                    fetch(approveURL,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(approveParams)
+                        })
+                        .then(response => response.json())
+                        .then(data => setPending(data.data))
+                } catch (error) {
+                    console.log(error)
+                }
+            }
     approve && sendApprove();
     }, [approve])
 
     useEffect(() => {
-   
-        const pendingTx2 = () => {
-
-            const {signatureId} = pending;
-    
-            fetch(`http://localhost:3001/api/kms`,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({listing: signatureId})
-                })
-                .then(response => response.json())
-                .then(data => setTx2(data.data))
-        }
+            const pendingTx2 = () => {
+                try {
+                    const {signatureId} = pending;
+                    fetch(`http://localhost:3001/api/kms`,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({listing: signatureId})
+                        })
+                        .then(response => response.json())
+                        .then(data => setTx2(data.data))
+                } catch (error) {
+                    console.log(error)
+                } 
+            } 
         pending.signatureId && pendingTx2();
     }, [pending])
 
     useEffect(() => {
-        const sendTx2 = async () => {
-            const tx2Config = JSON.parse(tx2.serializedTransaction);
-            tx2Config.from = address;
-            tx2Config.nonce = undefined;
-            tx2Config.gasPrice = tx2Config.gasPrice ? parseInt(tx2Config.gasPrice).toString(16) : undefined;
-            const approved = await window.ethereum.request({
-                method: 'eth_sendTransaction',
-                params: [tx2Config],
-              })
-            approved!==null && setApproved(approved);
-        }
+            const sendTx2 = async () => {
+                try {
+                    const tx2Config = JSON.parse(tx2.serializedTransaction);
+                    tx2Config.from = address;
+                    tx2Config.nonce = undefined;
+                    tx2Config.gasPrice = tx2Config.gasPrice ? parseInt(tx2Config.gasPrice).toString(16) : undefined;
+                    const approved = await window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [tx2Config],
+                    })
+                    approved!==null && setApproved(approved);
+            } catch (error) {
+                console.log(error) 
+             }  
+            } 
         tx2!==null && tx2.serializedTransaction && sendTx2();
        }, [tx2])
 
@@ -195,57 +232,70 @@ const ShowNFT = () => {
     const cancelParams = { operation: 'cancel', listingId: listingId };
 
     useEffect(() => {
-        const cancelListing = () => {
-        
-            fetch(cancelURL,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(cancelParams)
-                })
-                .then(response => response.json())
-                .then(data => setCancel(data.data))
-        }
+            const cancelListing = () => {
+                try {
+                    fetch(cancelURL,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(cancelParams)
+                        })
+                        .then(response => response.json())
+                        .then(data => setCancel(data.data))
+                } catch (error) {
+                    console.log(error)
+                }
+            }
     trigger2 && cancelListing();
     }, [trigger2])
 
     useEffect(() => {
-   
-        const pendingTx3 = () => {
-
-            const {signatureId} = cancel;
-    
-            fetch(`http://localhost:3001/api/kms`,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({listing: signatureId})
-                })
-                .then(response => response.json())
-                .then(data => setTx3(data.data))
-        }
+            const pendingTx3 = () => {
+                try {
+                    const {signatureId} = cancel;
+                    fetch(`http://localhost:3001/api/kms`,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({listing: signatureId})
+                        })
+                        .then(response => response.json())
+                        .then(data => setTx3(data.data))
+                } catch (error) {
+                    console.log(error) 
+                }
+            }  
         cancel.signatureId && pendingTx3();
     }, [cancel])
 
     useEffect(() => {
-        const sendTx3 = async () => {
-            const tx3Config = JSON.parse(tx3.serializedTransaction);
-            tx3Config.from = address;
-            tx3Config.nonce = undefined;
-            tx3Config.gasPrice = tx3Config.gasPrice ? parseInt(tx3Config.gasPrice).toString(16) : undefined;
-            console.log(await window.ethereum.request({
-                method: 'eth_sendTransaction',
-                params: [tx3Config],
-              }))
-        }
+            const sendTx3 = async () => {
+                try {
+                    const tx3Config = JSON.parse(tx3.serializedTransaction);
+                    tx3Config.from = address;
+                    tx3Config.nonce = undefined;
+                    tx3Config.gasPrice = tx3Config.gasPrice ? parseInt(tx3Config.gasPrice).toString(16) : undefined;
+                    console.log(await window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [tx3Config],
+                    }))
+                } catch (error) {
+                    console.log(error) 
+                }
+            }
         tx3!==null && tx3.serializedTransaction && sendTx3();
        }, [tx3])
+
+    //Buy operation
+
+    const buyURL = `http://localhost:3001/api/marketplace3`;
+    const buyParams = { operation: 'buy', listingId: listingId, buyer: address };
 
     return (
         <div>
@@ -261,7 +311,7 @@ const ShowNFT = () => {
                         <li>tokenId={tokenId}</li>
                         <li>owner={addressTrim}</li>
                     </ul>
-                    {seller!=undefined && address!=undefined && address!=null && address!=seller &&
+                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={listedPrice = (Number(listedPrice)+0.015)}
@@ -272,6 +322,11 @@ const ShowNFT = () => {
                         </ul>                        
                     }
                     {!listed.includes(listingId) && !approved && address===seller &&
+                        <ul className='ul'>
+                            <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
+                        </ul> 
+                    }
+                    {!listed.includes(listingId) && !approved && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
@@ -291,12 +346,32 @@ const ShowNFT = () => {
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
                     }
+                    {listed.includes(listingId) && !state.includes(listingId) && seller===undefined &&
+                        <ul className='ul'>
+                            <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
+                        </ul>
+                    }
                     {listed.includes(listingId) && !approved && state.includes(listingId) && address===seller &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
+                    {listed.includes(listingId) && !approved && state.includes(listingId) && seller===undefined &&
+                        <ul className='ul'>
+                            <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
+                        </ul> 
+                    }
                     {listed.includes(listingId) && approved && state.includes(listingId) && address===seller &&
+                        <ul className='ul'>
+                            <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
+                                value={price} onChange={(e) => setPrice(e.target.value)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}/>}</li>
+                            <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
+                        </ul>                        
+                    }
+                    {listed.includes(listingId) && approved && state.includes(listingId) && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}

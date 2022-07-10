@@ -20,7 +20,6 @@ export default function ActionAreaCard({...props}) {
   const params = {'name': {name}, 'description': {description}, 'image': {url}, 'tokenId': {tokenId}, 'contractAddress': {contractAddress}, 'address': {address},
 'listingId': {listingId}, 'seller': {seller}, 'listedPrice': {listedPrice}}
 
-//console.log(tokenId);
 
   return (
       <Card sx={{minWidth: 245, maxWidth: 345, mt: 3, ml: 3}}>
