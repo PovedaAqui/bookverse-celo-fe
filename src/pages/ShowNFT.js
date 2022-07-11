@@ -164,7 +164,7 @@ const ShowNFT = () => {
    //Approval operation
 
     const approveURL = `http://localhost:3001/api/approve`;
-    const approveParams = { tokenId: tokenId };
+    const approveParams = { tokenId: tokenId, contractAddress: contractAddress };
 
     useEffect(() => {
             const sendApprove = () => {   
@@ -297,7 +297,7 @@ const ShowNFT = () => {
     //Buy operation
 
     const buyURL = `http://localhost:3001/api/marketplace3`;
-    const sendPrice = (Number(listedPrice)+0.015)
+    const sendPrice = (Number(listedPrice)+0.15)
     const buyParams = { operation: 'buy', listingId: listingId, buyer: address, price: sendPrice };
 
     useEffect(() => {
@@ -446,7 +446,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                     {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && !approve2 &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
-                                value={listedPrice = (Number(listedPrice)+0.015)}
+                                value={listedPrice = (Number(listedPrice)+0.15)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
@@ -456,7 +456,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                     {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && approve2 &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
-                                value={listedPrice = (Number(listedPrice)+0.015)}
+                                value={listedPrice = (Number(listedPrice)+0.15)}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}/>}</li>
