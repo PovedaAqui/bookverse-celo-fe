@@ -28,7 +28,7 @@ const MyBooks = ({address}) => {
 
     //console.log(metadata);
     
-    return(
+    return (
       <div>
         <Grid container>
           {metadata!=undefined && metadata!=null && metadata.map(({metadata, contractAddress}) => {
@@ -37,12 +37,12 @@ const MyBooks = ({address}) => {
                 <div key={i}>
                   {metadata!==null && tokenId!==null && tokenId!==undefined && <Grid item xs={6} md={4} key={metadata.name}><ActionAreaCard name={metadata.name} description={metadata.description} image={metadata.image} address={address} tokenId={tokenId} contractAddress={contractAddress} listingId={(metadata.name + tokenId).replace(/ /g, '')}/></Grid>}
                 </div>
-              )
-            })
+              );
+            });
           })}
         </Grid>
       </div>
-    )
+    );
 }
 
 export default MyBooks;
