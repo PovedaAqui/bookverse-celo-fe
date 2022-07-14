@@ -105,14 +105,14 @@ const SellingNFT = ({address}) => {
 
     return (
         <div>
-            <Grid container>
+            <Grid container sx={{paddingLeft: 32, paddingBottom: 3}} >
                 {ipfs.length!=0 && ipfs.map(({name, description, image}, i1)=>
                     {
-                        return initiated.map(({tokenId, listingId, seller, price}, i2) =>{
+                        return initiated.map(({tokenId, listingId, seller, price, nftAddress}, i2) =>{
                             if(i1===i2){
                                 return(
                                     <div key={i2}>
-                                        <Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId} address={address} seller={seller} listedPrice={price} listingId={listingId}/></Grid>
+                                        <Grid item xs={6} md={4} key={name}><ActionAreaCard name={name} description={description} image={image} tokenId={tokenId} address={address} seller={seller} listedPrice={price} listingId={listingId} nftAddress={nftAddress}/></Grid>
                                     </div>
                                 )
                                     

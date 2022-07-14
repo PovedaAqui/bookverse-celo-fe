@@ -27,33 +27,45 @@ const ShowNFT = () => {
     const [approve2, setApprove2] = useState(false);
     const [approved2, setApproved2] = useState(null);
     const [tx5, setTx5] = useState(null);
+    const [compare, setCompare] = useState(null);
     // const [loading, setLoading] = useState(false);
     // const [success, setSuccess] = useState(false);
 
     let location = useLocation();
-    const {name} = location.state.name;
-    const {description} = location.state.description;
-    const {url} = location.state.image;
-    const {tokenId} = location.state.tokenId;
-    const {contractAddress} = location.state.contractAddress;
-    const {address} = location.state.address;
-    const {listingId} = location.state.listingId;
-    const {seller} = location.state.seller;
-    let {listedPrice} = location.state.listedPrice;
+    const {name} = location.state;
+    const {description} = location.state;
+    const {url} = location.state;
+    const {tokenId} = location.state;
+    const {contractAddress} = location.state;
+    const {address} = location.state;
+    const {listingId} = location.state;
+    const {seller} = location.state;
+    let {listedPrice} = location.state;
+    let {nftAddress} = location.state;
 
+    const addressTrim = (prop) => {
+        let addr = prop.substring(0, 5) + '…' + prop.substring(prop.length - 4)
+        return addr;
+    };
 
-    // let filterSeller = '';
-    // if (seller===undefined) {
-    //     filterSeller = '0x0000000000000000000000000000000000000000'
-    // } else {
-    //     return seller;
-    // }
+    //Compare address and owner
 
-    const addressTrim = (
-        address.substring(0, 5) + '…' + address.substring(address.length - 4)
-    );
+    useEffect(() => {
+        const compare = () => {
+            if(address && seller && address.toLowerCase() === seller.toLowerCase()){
+                    setCompare(true);
+                } else {
+                    setCompare(false);
+                }
+            }
+            compare()
+    }, [seller, address])
 
-    //Initial checking
+    console.log(compare)
+    console.log("address", address)
+    console.log("seller", seller)
+
+    //Initial checking        
 
     const initialURL = `http://localhost:3001/api/getListing`;
 
@@ -365,7 +377,7 @@ trigger3 && buyNFT();
 
     const approve2URL = `http://localhost:3001/api/approve2`;
     const sendPrice2 = (Number(listedPrice)+0.15)
-    const approve2Params = { spender: address, amount: sendPrice2 };
+    const approve2Params = { spender: address, amount: sendPrice2, nftAddress: nftAddress};
 
     useEffect(() => {
         const sendApprove2 = () => {   
@@ -441,9 +453,9 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                         <li>{name}</li>
                         <li>{description}</li>
                         <li>tokenId={tokenId}</li>
-                        <li>owner={addressTrim}</li>
+                        <li>owner={seller!==undefined && !compare ? addressTrim(seller) : addressTrim(address)}</li>
                     </ul>
-                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && !approve2 &&
+                    {address!=undefined && address!=null && seller!=undefined && seller!=null && !compare && !approve2 &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={listedPrice = (Number(listedPrice)+0.15)}
@@ -453,7 +465,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setApprove2(true)}>BUY</Button></li>
                         </ul>                        
                     }
-                    {address!=undefined && address!=null && seller!=undefined && seller!=null && address!=seller && approve2 &&
+                    {address!=undefined && address!=null && seller!=undefined && seller!=null && !compare && approve2 &&
                         <ul className='ul'>
                             <li className='li'>{<TextField disabled id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={listedPrice = (Number(listedPrice)+0.15)}
@@ -463,7 +475,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setTrigger3(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {!listed.includes(listingId) && !approved && address===seller &&
+                    {!listed.includes(listingId) && !approved && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
@@ -483,7 +495,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {listed.includes(listingId) && !state.includes(listingId) && address===seller &&
+                    {listed.includes(listingId) && !state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
@@ -493,7 +505,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
                     }
-                    {listed.includes(listingId) && !approved && state.includes(listingId) && address===seller &&
+                    {listed.includes(listingId) && !approved && state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
@@ -503,7 +515,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {listed.includes(listingId) && approved && state.includes(listingId) && address===seller &&
+                    {listed.includes(listingId) && approved && state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}

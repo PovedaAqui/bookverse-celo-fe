@@ -30,7 +30,7 @@ const MyBooks = ({address}) => {
     
     return (
       <div>
-        <Grid container>
+        <Grid container sx={{paddingLeft: 32, paddingBottom: 3}}>
           {metadata!=undefined && metadata!=null && metadata.map(({metadata, contractAddress}) => {
             return metadata.map(({metadata, tokenId}, i) => {
               return (

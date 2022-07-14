@@ -40,6 +40,7 @@ const StyledBox = styled(Box)((
     },
     [`& .${classes.drawer}`]: {
       width: drawerWidth,
+      margin: theme.spacing(3)
     },
     [`& .${classes.drawerPaper}`]: {
       width: drawerWidth,
@@ -80,7 +81,7 @@ export default function SearchAppBar({title, ...props}) {
 
   return (
     <StyledBox sx={{ flexGrow: 1 }}>
-      <AppBar className={classes.appBar}>
+      <AppBar className={classes.appBar} position='relative'>
         <Toolbar>
           <IconButton
             size="large"
@@ -112,6 +113,11 @@ export default function SearchAppBar({title, ...props}) {
         variant="permanent"
         anchor="left"
         classes={{ paper: classes.drawerPaper }}
+        sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        
         >
         <Toolbar />
         <Divider />
