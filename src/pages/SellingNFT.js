@@ -34,7 +34,7 @@ const SellingNFT = ({address}) => {
         
     const getInitiated = async () => {
         try {
-            const response = listingId.map(async (data) => {
+            const response = listingId!==null && listingId.map(async (data) => {
                 const getInit = await fetch(getInitiatedURL,
                     {
                         method: 'POST',

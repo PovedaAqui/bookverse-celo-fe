@@ -61,10 +61,6 @@ const ShowNFT = () => {
             compare()
     }, [seller, address])
 
-    console.log(compare)
-    console.log("address", address)
-    console.log("seller", seller)
-
     //Initial checking        
 
     const initialURL = `http://localhost:3001/api/getListing`;
@@ -377,7 +373,7 @@ trigger3 && buyNFT();
 
     const approve2URL = `http://localhost:3001/api/approve2`;
     const sendPrice2 = (Number(listedPrice)+0.15)
-    const approve2Params = { spender: address, amount: sendPrice2, nftAddress: nftAddress};
+    const approve2Params = { spender: address, amount: sendPrice2 };
 
     useEffect(() => {
         const sendApprove2 = () => {   
@@ -400,6 +396,7 @@ trigger3 && buyNFT();
 approve2 && sendApprove2();
 }, [approve2])
 
+
 useEffect(() => {
     const pendingTx5 = () => {
         try {
@@ -421,6 +418,7 @@ useEffect(() => {
     } 
 pending2.signatureId && pendingTx5();
 }, [pending2])
+
 
 useEffect(() => {
     const sendTx5 = async () => {
@@ -475,17 +473,17 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setTrigger3(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {!listed.includes(listingId) && !approved && compare &&
+                    {listed && !listed.includes(listingId) && !approved && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {!listed.includes(listingId) && !approved && seller===undefined &&
+                    {listed && !listed.includes(listingId) && !approved && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {!listed.includes(listingId) && approved &&
+                    {listed && !listed.includes(listingId) && approved &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
@@ -495,27 +493,27 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {listed.includes(listingId) && !state.includes(listingId) && compare &&
+                    {listed && listed.includes(listingId) && !state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
                     }
-                    {listed.includes(listingId) && !state.includes(listingId) && seller===undefined &&
+                    {listed && listed.includes(listingId) && !state.includes(listingId) && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setTrigger2(true)}>CANCEL</Button></li>
                         </ul>
                     }
-                    {listed.includes(listingId) && !approved && state.includes(listingId) && compare &&
+                    {listed && listed.includes(listingId) && !approved && state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {listed.includes(listingId) && !approved && state.includes(listingId) && seller===undefined &&
+                    {listed && listed.includes(listingId) && !approved && state.includes(listingId) && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'><Button variant="contained" onClick={()=>setApprove(true)}>SELL</Button></li>
                         </ul> 
                     }
-                    {listed.includes(listingId) && approved && state.includes(listingId) && compare &&
+                    {listed && listed.includes(listingId) && approved && state.includes(listingId) && compare &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
@@ -525,7 +523,7 @@ tx5!==null && tx5.serializedTransaction && sendTx5();
                             <li><Button variant="contained" onClick={()=>setTrigger(true)}>CONFIRM</Button></li>
                         </ul>                        
                     }
-                    {listed.includes(listingId) && approved && state.includes(listingId) && seller===undefined &&
+                    {listed && listed.includes(listingId) && approved && state.includes(listingId) && seller===undefined &&
                         <ul className='ul'>
                             <li className='li'>{<TextField required id="outlined-basic" label="PRICE" variant="outlined" helperText="$CELO" type="number"
                                 value={price} onChange={(e) => setPrice(e.target.value)}
