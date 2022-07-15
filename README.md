@@ -82,7 +82,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Mercapp][product-screenshot-1]](https://media.giphy.com/media/ZhNH8Eys8RweUhB3qT/giphy.gif)
+[![Mercapp][product-screenshot-1]](https://media.giphy.com/media/ZhNH8Eys8RweUhB3qT/giphy.gif =250x250)
 
 NFTs Marketplace running on the Celo blockchain and using Tatum endpoints.
 
