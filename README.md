@@ -166,7 +166,11 @@ npm run dev -- -p 3001
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Buy
+
 ![Buy](https://media.giphy.com/media/LbQyMJ4AfNDIoDzty1/giphy.gif)
+
+Sell
 
 ![Sell](https://media.giphy.com/media/jFVxM4WRjf9U3IrsTE/giphy.gif)
 
