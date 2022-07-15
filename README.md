@@ -17,12 +17,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/graphs/contributors]
-[![Forks][forks-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/network/members]
-[![Stargazers][stars-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/stargazers]
-[![Issues][issues-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/issues]
-[![MIT License][license-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/LICENSE.txt]
-[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/luiscarlospoveda/]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -103,8 +103,9 @@ In this app users can:
 
 This project built using:
 
-* [![React][React.js]][https://reactjs.org/]
-* [![Next][Next.js]][https://nextjs.org/]
+* [![React][React.js]][React-url]
+* [![Next][Next.js]][Next-url]
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -140,7 +141,7 @@ _Below is an example of how you can instruct your audience on installing and set
 5. Create a .env.local file
 6. Enter the folowing parameters in `.env.local`
    ```js
-   TATUM_API_KEY = "YOUR-CELO-TESTNET.API-KEY"
+   TATUM_API_KEY = "YOUR-CELO-TESTNET-API-KEY"
    CONTRACT_ADDRESS = "0xCA6Bd586a28aEC941aEcfE2F17c940d1A01D23C2"
    ```
 
@@ -165,9 +166,8 @@ npm run dev -- -p 3001
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
-[product-screenshot]](https://drive.google.com/file/d/1aTap-7oU-vKr7sKNwMnMwvjipprk3Jtk/view?usp=sharing)
-[product-screenshot]](https://drive.google.com/file/d/1oQ424sm4M_X-mrY2QdTU1BV2wJAht4_X/view?usp=sharing)
+[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1aTap-7oU-vKr7sKNwMnMwvjipprk3Jtk/view?usp=sharing)
+[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1oQ424sm4M_X-mrY2QdTU1BV2wJAht4_X/view?usp=sharing)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -222,6 +222,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 Luis - [@povedaaqui](https://twitter.com/povedaaqui) - luis.poveda9321@gmail.com
 
 Project Link Frontend: [https://github.com/PovedaAqui/mercapp-celo-fe](https://github.com/PovedaAqui/mercapp-celo-fe)
+
 Project Link Backend: [https://github.com/PovedaAqui/mercapp-celo-api](https://github.com/PovedaAqui/mercapp-celo-api)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
