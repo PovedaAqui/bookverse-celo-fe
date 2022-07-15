@@ -1,65 +1,87 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
+import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import Divider from '@mui/material/Divider';
 import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Drawer from '@mui/material/Drawer';
+import { makeStyles } from '@mui/material/styles';
+import StoreIcon from '@mui/icons-material/Store';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import {ListItemIcon, ListItemText, ListItem} from '@mui/material';
+import { useLocation, useNavigate} from 'react-router';
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing('65%'),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  }));
+const PREFIX = 'SearchAppBar';
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+const classes = {
+  page: `${PREFIX}-page`,
+  drawer: `${PREFIX}-drawer`,
+  drawerPaper: `${PREFIX}-drawerPaper`,
+  appBar: `${PREFIX}-appBar`
+};
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
+const StyledBox = styled(Box)((
+  {
+    theme
+  }
+) => {
+  return {
+    [`& .${classes.page}`]: {
+      background: '#f9f9f9',
+      width: '100%',
+      padding: theme.spacing(3),
     },
-  },
-}));
+    [`& .${classes.drawer}`]: {
+      width: drawerWidth,
+      margin: theme.spacing(3)
+    },
+    [`& .${classes.drawerPaper}`]: {
+      width: drawerWidth,
+    },
+    [`& .${classes.appBar}`]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+    [`& .${classes.active}`]: {
+      background: '#f4f4f4'
+    }
+};});
+
+const drawerWidth = 250;
 
 export default function SearchAppBar({title, ...props}) {
+
   const { data } = props;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [state, setState] = React.useState({
+    left: false
+  });
+
+  const menuItems = [
+    { 
+      text: 'Store', 
+      icon: <StoreIcon color="secondary" />, 
+      path: '/sellingnft' 
+    },
+    { 
+      text: 'My NFTs', 
+      icon: <AccountBalanceWalletIcon color="secondary" />, 
+      path: '/' 
+    },
+  ];
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <StyledBox sx={{ flexGrow: 1 }}>
+      <AppBar className={classes.appBar} position='relative'>
         <Toolbar>
           <IconButton
             size="large"
@@ -78,15 +100,6 @@ export default function SearchAppBar({title, ...props}) {
           >
             {title}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
 
           <Button id={data.id} color={data.color} variant={data.variant} href="#contained-buttons" onClick={data.handle}>
           {data.colorIcon ? <LogoutIcon color={data.colorIcon} /> : null}
@@ -94,6 +107,34 @@ export default function SearchAppBar({title, ...props}) {
           </Button>
         </Toolbar>
       </AppBar>
-    </Box>
+
+      <Drawer 
+        className={classes.drawer}
+        variant="permanent"
+        anchor="left"
+        classes={{ paper: classes.drawerPaper }}
+        sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        
+        >
+        <Toolbar />
+        <Divider />
+        <List>
+          {menuItems.map((item) => (
+              <ListItem 
+                button 
+                key={item.text} 
+                onClick={() => navigate(item.path)}
+                className={location.pathname == item.path ? classes.active : null}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+        </List>
+        </Drawer>
+    </StyledBox>
   );
 }
