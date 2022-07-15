@@ -126,7 +126,7 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Follow the instructions to run this project locally.
 
 1. Get a paid API Key at [https://tatum.io/](https://tatum.io/)
 2. Clone the repo
