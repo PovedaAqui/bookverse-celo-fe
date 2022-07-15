@@ -138,7 +138,7 @@ _Below is an example of how you can instruct your audience on installing and set
    npm install
    ```
 4. Repeat steps 2 and 3 for the [https://github.com/PovedaAqui/mercapp-celo-api](https://github.com/PovedaAqui/mercapp-celo-api)
-5. Create a .env.local file
+5. Create a .env.local file in the backend (step 4)
 6. Enter the folowing parameters in `.env.local`
    ```js
    TATUM_API_KEY = "YOUR-CELO-TESTNET-API-KEY"
