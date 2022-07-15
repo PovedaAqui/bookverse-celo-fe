@@ -17,12 +17,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/graphs/contributors]
-[![Forks][forks-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/network/members]
-[![Stargazers][stars-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/stargazers]
-[![Issues][issues-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/issues]
-[![MIT License][license-shield]][https://github.com/PovedaAqui/mercapp-celo-fe/LICENSE.txt]
-[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/luiscarlospoveda/]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -82,7 +82,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1TV1ASmGFMT__tDzj28PJ0nsCx4Yfq0Dc/view?usp=sharing)
+![ ](https://media.giphy.com/media/ZhNH8Eys8RweUhB3qT/giphy.gif)
 
 NFTs Marketplace running on the Celo blockchain and using Tatum endpoints.
 
@@ -103,8 +103,9 @@ In this app users can:
 
 This project built using:
 
-* [![React][React.js]][https://reactjs.org/]
-* [![Next][Next.js]][https://nextjs.org/]
+* [![React][React.js]][React-url]
+* [![Next][Next.js]][Next-url]
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -140,7 +141,7 @@ _Below is an example of how you can instruct your audience on installing and set
 5. Create a .env.local file
 6. Enter the folowing parameters in `.env.local`
    ```js
-   TATUM_API_KEY = "YOUR-CELO-TESTNET.API-KEY"
+   TATUM_API_KEY = "YOUR-CELO-TESTNET-API-KEY"
    CONTRACT_ADDRESS = "0xCA6Bd586a28aEC941aEcfE2F17c940d1A01D23C2"
    ```
 
@@ -165,9 +166,13 @@ npm run dev -- -p 3001
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Buy
 
-[product-screenshot]](https://drive.google.com/file/d/1aTap-7oU-vKr7sKNwMnMwvjipprk3Jtk/view?usp=sharing)
-[product-screenshot]](https://drive.google.com/file/d/1oQ424sm4M_X-mrY2QdTU1BV2wJAht4_X/view?usp=sharing)
+![Buy](https://media.giphy.com/media/LbQyMJ4AfNDIoDzty1/giphy.gif)
+
+Sell
+
+![Sell](https://media.giphy.com/media/jFVxM4WRjf9U3IrsTE/giphy.gif)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -222,6 +227,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 Luis - [@povedaaqui](https://twitter.com/povedaaqui) - luis.poveda9321@gmail.com
 
 Project Link Frontend: [https://github.com/PovedaAqui/mercapp-celo-fe](https://github.com/PovedaAqui/mercapp-celo-fe)
+
 Project Link Backend: [https://github.com/PovedaAqui/mercapp-celo-api](https://github.com/PovedaAqui/mercapp-celo-api)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -243,19 +249,21 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/povedaaqui/mercapp-celo-fe.svg?style=for-the-badge
+[contributors-url]: https://github.com/PovedaAqui/mercapp-celo-fe/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/povedaaqui/mercapp-celo-fe.svg?style=for-the-badge
+[forks-url]: https://github.com/PovedaAqui/mercapp-celo-fe/network/members
+[stars-shield]: https://img.shields.io/github/stars/povedaaqui/mercapp-celo-fe.svg?style=for-the-badge
+[stars-url]: https://github.com/PovedaAqui/mercapp-celo-fe/stargazers
+[issues-shield]: https://img.shields.io/github/issues/povedaaqui/mercapp-celo-fe.svg?style=for-the-badge
+[issues-url]: https://github.com/PovedaAqui/mercapp-celo-fe/issues
+[license-shield]: https://img.shields.io/github/license/povedaaqui/mercapp-celo-fe.svg?style=for-the-badge
+[license-url]: https://github.com/PovedaAqui/mercapp-celo-fe/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[linkedin-url]: https://linkedin.com/in/luiscarlospoveda
+[product-screenshot-1]: https://drive.google.com/file/d/1TV1ASmGFMT__tDzj28PJ0nsCx4Yfq0Dc/view?usp=sharing
+[product-screenshot-2]: https://drive.google.com/file/d/1aTap-7oU-vKr7sKNwMnMwvjipprk3Jtk/view?usp=sharing
+[product-screenshot-3]: https://drive.google.com/file/d/1oQ424sm4M_X-mrY2QdTU1BV2wJAht4_X/view?usp=sharing
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
