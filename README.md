@@ -166,9 +166,9 @@ npm run dev -- -p 3001
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-[![Buy][product-screenshot-2]](https://media.giphy.com/media/LbQyMJ4AfNDIoDzty1/giphy.gif)
+![ ](https://media.giphy.com/media/LbQyMJ4AfNDIoDzty1/giphy.gif)
 
-[![Sell][product-screenshot-3]](https://media.giphy.com/media/jFVxM4WRjf9U3IrsTE/giphy.gif)
+![ ](https://media.giphy.com/media/jFVxM4WRjf9U3IrsTE/giphy.gif)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
