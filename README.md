@@ -182,6 +182,7 @@ Sell
 ## Roadmap
 
 - [ ] Improve conditional rendering
+- [ ] Improve and simplify API requests
 - [ ] Migrate from material-ui to a more controllable framework
 - [ ] Add mint function
 - [ ] Deploy project's token
